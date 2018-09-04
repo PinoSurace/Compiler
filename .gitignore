@@ -8,3 +8,6 @@ venv
 # course example venv
 popl_venv
 
+# PLY yacc generated files
+**/parser.out
+**/parsetab.py
