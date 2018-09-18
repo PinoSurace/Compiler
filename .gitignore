@@ -3,10 +3,10 @@
 **/__pycache__
 
 # pycharm virtualenv
-venv
+**/venv
 
 # course example venv
-popl_venv
+**/popl_venv
 
 # PLY yacc generated files
 **/parser.out
