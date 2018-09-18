@@ -1,0 +1,4 @@
+VAR aDAY IS 2018-09-01;
+Print( aDay );
+aDAY.year <- aDAY'year + 20;
+Print( aDay );

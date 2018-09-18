@@ -1,0 +1,7 @@
+VAR christmas_day IS 2018-12-25;
+VAR diff IS christmas_day - today;
+IF diff = 1 THEN
+  Print( "Jouluaatto!" );
+ELSE
+  Print( diff, "days until christmas" );
+ENDIF;
