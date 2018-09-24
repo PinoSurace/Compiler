@@ -14,4 +14,4 @@ LexToken(SEMICOLON,';',1,63)
 LexToken(funcIDENT,'Lentokonesuihkuturbiiniapumekaanikkoaliupseerioppilas',2,65)
 LexToken(SEMICOLON,';',2,118)
 LexToken(funcIDENT,'Petoel',4,121)
-4 :Illegal character 'ä'
+Illegal character 'ä' at line 4
