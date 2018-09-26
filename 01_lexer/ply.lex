@@ -96,6 +96,7 @@ if __name__ == '__main__':
         # using codecs to make sure we process unicode
         with codecs.open( ns.file, 'r', encoding='utf-8' ) as INFILE:
             # blindly read all to memory (what if that is a 42Gb file?)
+            # TODO: limit the file size to 100MB?
             data = INFILE.read() 
 
         lexer.input( data )
