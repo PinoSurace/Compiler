@@ -47,8 +47,8 @@ def roman_to_int(input : str) -> int:
 import sys, ply.lex
 
 tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-         'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', 'ENDWHILE', 'FUNCTION', 'RETURN', 
-         \ 'END')
+         'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \ 
+         'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
 
 t_PUSH = r'⇑'
 t_POP  = r'⇓' 
