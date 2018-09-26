@@ -50,6 +50,71 @@ tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
          'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', 'ENDWHILE', 'FUNCTION', 'RETURN', 
          \ 'END')
 
+##tokens definition
+
+
+# non-tokens
+
+WHITESPACE ::= ** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
+               are accepted but ignored in the input (for each newline
+               keep a line count to get better error messages) **
+
+COMMENT ::= ** anything between square brackets [ ]
+               are accepted but ignored **
+
+
+# reserved words (each identified as a token) are:
+VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
+FUNCTION, RETURN, END
+
+# one and two letter tokens:
+LARROW ::= '<-'
+RARROW ::= '->'
+LPAREN ::= '('
+RPAREN ::= ')'
+COMMA  ::= ','
+DOT    ::= '.'
+APOSTROPHE ::= "'"
+SEMICOLON ::= ';'
+
+EQ    ::= '='
+NOTEQ ::= '!='
+LT    ::= '<'
+LTEQ  ::= '<='
+GT    ::= '>'
+GTEQ  ::= '>='
+PLUS  ::= '+'
+MINUS ::= '-'
+MULT  ::= '*'
+DIV   ::= '/'
+
+
+# longer tokens
+
+DAY_LITERAL ::= ** date in ISO format, four numerical digits followed by minus
+                followed by two digits followed by minus followed by
+                two digits. E.g. 2018-09-27 ***
+
+NUMBER_LITERAL ::= ** one or more numerical digits **
+
+STRING_LITERAL ::= ** any number of characters inside vertical double
+                   quotation marks.  E.g.  "merkkijono" **
+
+varIDENT ::= ** a variable name starts with a lowercase letter (a-z) and
+             must be followed by at least one character in
+             set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
+             character can be question mark. NOTE that this does not allow
+             one letter variable names. E.g. valid varIDENT:
+             ab, iI, i9_abc, a9? **
+
+funcIDENT ::= ** a function name starts with an uppercase letter (A-Z) and
+              must be followed by at least one character in
+              set( 'a-z', '0-9', '_' ). NOTE that this does not allow
+              one letter function names. E.g. valid funcIDENT:
+              Foo, J00, S_o_m_e **
+
+##tokens definition end
+
 t_PUSH = r'⇑'
 t_POP  = r'⇓' 
 t_SWAP = r'↔'
