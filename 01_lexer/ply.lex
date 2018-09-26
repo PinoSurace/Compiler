@@ -91,6 +91,7 @@ if __name__ == '__main__':
         # identify who wrote this
         print( '85471 Jyke Savia' )
         print( '88888 Ahto Simakuutio' )
+        print( '------ Joonas Jäppinen')
     elif ns.file is None:
         # user didn't provide input filename
         parser.print_help()
