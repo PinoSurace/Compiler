@@ -47,8 +47,8 @@ def roman_to_int(input : str) -> int:
 import sys, ply.lex
 
 tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-         'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', 'ENDWHILE', 'FUNCTION', 'RETURN', 
-         \ 'END')
+         'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \ 
+         'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
 
 ##tokens definition
 
@@ -156,6 +156,7 @@ if __name__ == '__main__':
         # identify who wrote this
         print( '85471 Jyke Savia' )
         print( '88888 Ahto Simakuutio' )
+        print( '------ Joonas Jäppinen')
     elif ns.file is None:
         # user didn't provide input filename
         parser.print_help()
