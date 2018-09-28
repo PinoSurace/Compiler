@@ -91,27 +91,27 @@ DIV   ::= '/'
 
 # longer tokens
 
-DAY_LITERAL ::= ** date in ISO format, four numerical digits followed by minus
-                followed by two digits followed by minus followed by
-                two digits. E.g. 2018-09-27 ***
+DAY_LITERAL ::= r'\d\d\d\d-\d\d-\d\d' #** date in ISO format, four numerical digits followed by minus
+                                      #followed by two digits followed by minus followed by
+                                      #two digits. E.g. 2018-09-27 ***
 
-NUMBER_LITERAL ::= ** one or more numerical digits **
+NUMBER_LITERAL ::= r'\d+'#** one or more numerical digits **
 
-STRING_LITERAL ::= ** any number of characters inside vertical double
-                   quotation marks.  E.g.  "merkkijono" **
+STRING_LITERAL ::= r'\".*\"'   #** any number of characters inside vertical double
+                       #quotation marks.  E.g.  "merkkijono" **
 
-varIDENT ::= ** a variable name starts with a lowercase letter (a-z) and
-             must be followed by at least one character in
-             set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
-             character can be question mark. NOTE that this does not allow
-             one letter variable names. E.g. valid varIDENT:
-             ab, iI, i9_abc, a9? **
+varIDENT ::=   r'[a-z][a-z|A-Z|0-9|_]+\?{0,1}$'     #** a variable name starts with a lowercase letter (a-z) and
+                                                    #must be followed by at least one character in
+                                                    #set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
+                                                    #character can be question mark. NOTE that this does not allow
+                                                    #one letter variable names. E.g. valid varIDENT:
+                                                    #ab, iI, i9_abc, a9? **
 
-funcIDENT ::= ** a function name starts with an uppercase letter (A-Z) and
-              must be followed by at least one character in
-              set( 'a-z', '0-9', '_' ). NOTE that this does not allow
-              one letter function names. E.g. valid funcIDENT:
-              Foo, J00, S_o_m_e **
+funcIDENT ::= r'[A-Z][a-z|0-9|_]+'    #** a function name starts with an uppercase letter (A-Z) and
+                                          #must be followed by at least one character in
+                                          #set( 'a-z', '0-9', '_' ). NOTE that this does not allow
+                                          #one letter function names. E.g. valid funcIDENT:
+                                          #Foo, J00, S_o_m_e **
 
 ##tokens definition end
 
