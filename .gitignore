@@ -4,9 +4,11 @@
 
 # pycharm virtualenv
 **/venv
+**/venv1
 
 # course example venv
 **/popl_venv
+**/popl_venv1
 
 # PLY yacc generated files
 **/parser.out
