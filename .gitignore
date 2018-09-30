@@ -13,3 +13,6 @@
 # PLY yacc generated files
 **/parser.out
 **/parsetab.py
+
+# the other stuff
+.idea
