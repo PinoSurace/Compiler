@@ -48,14 +48,11 @@ import sys, ply.lex, datetime
 
 keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
             'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
-tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-            'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE' \
+tokens = keywords + ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
+            'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT'
-
-
-         )
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT')
 
 ##tokens definition
 
@@ -66,7 +63,7 @@ tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
 #are accepted but ignored in the input (for each newline
 #keep a line count to get better error messages) **
 def t_WHITESPACE(t):
-    r''
+    r' \t\n\r'
     t.lexer.lineno += t.value.count('\n')
 
 
@@ -82,25 +79,25 @@ def t_COMMENT(t):
 #FUNCTION, RETURN, END
 
 # one and two letter tokens:
-t_LARROW = '<-'
-t_RARROW = '->'
-t_LPAREN = '('
-t_RPAREN = ')'
-t_COMMA  = ','
-t_DOT    = '.'
-t_APOSTROPHE = "'"
-t_SEMICOLON  = ';'
+t_LARROW = r'<-'
+t_RARROW = r'->'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_COMMA  = r','
+t_DOT    = r'.'
+t_APOSTROPHE = r"'"
+t_SEMICOLON  = r';'
 
-t_EQ    = '='
-t_NOTEQ = '!='
-t_LT    = '<'
-t_LTEQ  = '<='
-t_GT    = '>'
-t_GTEQ  = '>='
-t_PLUS  = '+'
-t_MINUS = '-'
-t_MULT  = '*'
-t_DIV   = '/'
+t_EQ    = r'='
+t_NOTEQ = r'!='
+t_LT    = r'<'
+t_LTEQ  = r'<='
+t_GT    = r'>'
+t_GTEQ  = r'>='
+t_PLUS  = r'\+'
+t_MINUS = r'\-'
+t_MULT  = r'\*'
+t_DIV   = r'/'
 
 
 # longer tokens
