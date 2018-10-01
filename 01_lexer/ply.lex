@@ -55,59 +55,59 @@ tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
 
 # non-tokens
 
-WHITESPACE ::= ** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
-               are accepted but ignored in the input (for each newline
-               keep a line count to get better error messages) **
+t_WHITESPACE =  r''        #** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
+                        #are accepted but ignored in the input (for each newline
+                        #keep a line count to get better error messages) **
 
-COMMENT ::= ** anything between square brackets [ ]
-               are accepted but ignored **
+t_COMMENT = r'[.*]'   #** anything between square brackets [ ]
+                      #are accepted but ignored **
 
 
 # reserved words (each identified as a token) are:
-VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
-FUNCTION, RETURN, END
+#VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
+#FUNCTION, RETURN, END
 
 # one and two letter tokens:
-LARROW ::= '<-'
-RARROW ::= '->'
-LPAREN ::= '('
-RPAREN ::= ')'
-COMMA  ::= ','
-DOT    ::= '.'
-APOSTROPHE ::= "'"
-SEMICOLON ::= ';'
+t_LARROW = '<-'
+t_RARROW = '->'
+t_LPAREN = '('
+t_RPAREN = ')'
+t_COMMA  = ','
+t_DOT    = '.'
+t_APOSTROPHE = "'"
+t_SEMICOLON = ';'
 
-EQ    ::= '='
-NOTEQ ::= '!='
-LT    ::= '<'
-LTEQ  ::= '<='
-GT    ::= '>'
-GTEQ  ::= '>='
-PLUS  ::= '+'
-MINUS ::= '-'
-MULT  ::= '*'
-DIV   ::= '/'
+t_EQ    = '='
+t_NOTEQ = '!='
+t_LT    = '<'
+t_LTEQ  = '<='
+t_GT    = '>'
+t_GTEQ  = '>='
+t_PLUS  = '+'
+t_MINUS = '-'
+t_MULT  = '*'
+t_DIV   = '/'
 
 
 # longer tokens
 
-DAY_LITERAL ::= r'\d\d\d\d-\d\d-\d\d' #** date in ISO format, four numerical digits followed by minus
+t_DAY_LITERAL = r'\d\d\d\d-\d\d-\d\d' #** date in ISO format, four numerical digits followed by minus
                                       #followed by two digits followed by minus followed by
                                       #two digits. E.g. 2018-09-27 ***
 
-NUMBER_LITERAL ::= r'\d+'#** one or more numerical digits **
+t_NUMBER_LITERAL = r'\d+'#** one or more numerical digits **
 
-STRING_LITERAL ::= r'\".*\"'   #** any number of characters inside vertical double
-                       #quotation marks.  E.g.  "merkkijono" **
+t_STRING_LITERAL = r'\".*\"'   #** any number of characters inside vertical double
+                               #quotation marks.  E.g.  "merkkijono" **
 
-varIDENT ::=   r'[a-z][a-z|A-Z|0-9|_]+\?{0,1}$'     #** a variable name starts with a lowercase letter (a-z) and
+t_varIDENT =   r'[a-z][a-z|A-Z|0-9|_]+\?{0,1}$'     #** a variable name starts with a lowercase letter (a-z) and
                                                     #must be followed by at least one character in
                                                     #set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
                                                     #character can be question mark. NOTE that this does not allow
                                                     #one letter variable names. E.g. valid varIDENT:
                                                     #ab, iI, i9_abc, a9? **
 
-funcIDENT ::= r'[A-Z][a-z|0-9|_]+'    #** a function name starts with an uppercase letter (A-Z) and
+t_funcIDENT = r'[A-Z][a-z|0-9|_]+'    #** a function name starts with an uppercase letter (A-Z) and
                                           #must be followed by at least one character in
                                           #set( 'a-z', '0-9', '_' ). NOTE that this does not allow
                                           #one letter function names. E.g. valid funcIDENT:
