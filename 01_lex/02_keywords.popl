@@ -1,0 +1,2 @@
+[ tokens can be in any order. order is a syntax check, not tokens ]
+VAR THEN IS WHILE FUNCTION DO END.

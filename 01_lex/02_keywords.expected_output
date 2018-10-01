@@ -1,0 +1,8 @@
+LexToken(VAR,'VAR',2,68)
+LexToken(THEN,'THEN',2,72)
+LexToken(IS,'IS',2,77)
+LexToken(WHILE,'WHILE',2,80)
+LexToken(FUNCTION,'FUNCTION',2,86)
+LexToken(DO,'DO',2,95)
+LexToken(END,'END',2,98)
+LexToken(DOT,'.',2,101)

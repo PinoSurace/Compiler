@@ -1,0 +1,15 @@
+FUNCTION Year( date ) ->
+  RETURN date'year;
+END;
+
+FUNCTION Month( date ) ->
+  RETURN date'month;
+END;
+
+FUNCTION Day( date ) ->
+  RETURN date'day;
+END;
+
+VAR tmp IS 1977-01-27;
+
+Print( Day(tmp), Month(tmp), Year(tmp) );
