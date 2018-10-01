@@ -44,23 +44,37 @@ def roman_to_int(input : str) -> int:
 
 
 # ----------------------------------------------------------------------
-import sys, ply.lex
+import sys, ply.lex, datetime
 
+keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
+            'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
 tokens = ( 'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-         'VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \ 
-         'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
+            'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE' \
+           'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
+           'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT'
+
+
+         )
 
 ##tokens definition
 
 
 # non-tokens
 
-t_WHITESPACE =  r''        #** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
-                        #are accepted but ignored in the input (for each newline
-                        #keep a line count to get better error messages) **
+#** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
+#are accepted but ignored in the input (for each newline
+#keep a line count to get better error messages) **
+def t_WHITESPACE(t):
+    r''
+    t.lexer.lineno += t.value.count('\n')
 
-t_COMMENT = r'[.*]'   #** anything between square brackets [ ]
-                      #are accepted but ignored **
+
+#** anything between square brackets [ ]
+#are accepted but ignored **
+def t_COMMENT(t):
+    r'[.*]'
+    t.lexer.lineno += t.value.count('\n')
 
 
 # reserved words (each identified as a token) are:
@@ -75,7 +89,7 @@ t_RPAREN = ')'
 t_COMMA  = ','
 t_DOT    = '.'
 t_APOSTROPHE = "'"
-t_SEMICOLON = ';'
+t_SEMICOLON  = ';'
 
 t_EQ    = '='
 t_NOTEQ = '!='
@@ -91,27 +105,42 @@ t_DIV   = '/'
 
 # longer tokens
 
-t_DAY_LITERAL = r'\d\d\d\d-\d\d-\d\d' #** date in ISO format, four numerical digits followed by minus
-                                      #followed by two digits followed by minus followed by
-                                      #two digits. E.g. 2018-09-27 ***
+#** date in ISO format, four numerical digits followed by minus
+#followed by two digits followed by minus followed by
+#two digits. E.g. 2018-09-27 ***
+def t_DAY_LITERAL(t):
+    r'\d\d\d\d-\d\d-\d\d'
+    date = t.value.split("-")
+    date = datetime.date(date[0], date[1], date[2])
+    t.value = date.isoformat()
+    return t
 
-t_NUMBER_LITERAL = r'\d+'#** one or more numerical digits **
 
-t_STRING_LITERAL = r'\".*\"'   #** any number of characters inside vertical double
-                               #quotation marks.  E.g.  "merkkijono" **
+#** one or more numerical digits **
+def t_NUMBER_LITERAL(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
 
-t_varIDENT =   r'[a-z][a-z|A-Z|0-9|_]+\?{0,1}$'     #** a variable name starts with a lowercase letter (a-z) and
-                                                    #must be followed by at least one character in
-                                                    #set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
-                                                    #character can be question mark. NOTE that this does not allow
-                                                    #one letter variable names. E.g. valid varIDENT:
-                                                    #ab, iI, i9_abc, a9? **
 
-t_funcIDENT = r'[A-Z][a-z|0-9|_]+'    #** a function name starts with an uppercase letter (A-Z) and
-                                          #must be followed by at least one character in
-                                          #set( 'a-z', '0-9', '_' ). NOTE that this does not allow
-                                          #one letter function names. E.g. valid funcIDENT:
-                                          #Foo, J00, S_o_m_e **
+#** any number of characters inside vertical double
+#quotation marks.  E.g.  "merkkijono" **
+t_STRING_LITERAL = r'\".*\"'
+
+#** a variable name starts with a lowercase letter (a-z) and
+#must be followed by at least one character in
+#set( 'a-z', 'A-Z', '0-9', '_' ). In addition the last
+#character can be question mark. NOTE that this does not allow
+#one letter variable names. E.g. valid varIDENT:
+#ab, iI, i9_abc, a9? **
+t_varIDENT = r'[a-z][a-z|A-Z|0-9|_]+\?{0,1}$'
+
+#** a function name starts with an uppercase letter (A-Z) and
+#must be followed by at least one character in
+#set( 'a-z', '0-9', '_' ). NOTE that this does not allow
+#one letter function names. E.g. valid funcIDENT:
+#Foo, J00, S_o_m_e **
+t_funcIDENT = r'[A-Z][a-z|0-9|_]+'
 
 ##tokens definition end
 
