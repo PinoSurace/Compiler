@@ -1,77 +1,58 @@
 #!/usr/bin/env python3
-# ----------------------------------------------------------------------
-''' SuperSimple (and useless) unicodeLanguage. Numbers are roman numerals.
-
-push 1 to stack, push 2 to stack, add them, print top of stack:
-I⇑⍽II⇑⍽⊕⍽ψ⍽↵  
-
-push 1 to stack, push 11 to stack, swap 1. and 2. item in stack, minus, print:
-I⇑⍽XI⇑⍽↔⍽⊖⍽ψ⍽↵
-'''
-
-
-# ----------------------------------------------------------------------
-# support routines for roman numerals conversion
-# source: https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch03s24.html
-
-def int_to_roman(input):
-    if not 0 < input < 4000:
-        raise ValueError( "to_roman: Argument must be between 1 and 3999" )
-    ints = (1000, 900,  500, 400, 100,  90, 50,  40, 10,  9,   5,  4,   1)
-    nums = ('M',  'CM', 'D', 'CD','C', 'XC','L','XL','X','IX','V','IV','I')
-    result = []
-    for i in range(len(ints)):
-        count = int(input / ints[i])
-        result.append(nums[i] * count)
-        input -= ints[i] * count
-    return ''.join(result)
-
-def roman_to_int(input : str) -> int:
-    """ Convert a Roman numeral to an integer. """
-
-    nums = {'M':1000, 'D':500, 'C':100, 'L':50, 'X':10, 'V':5, 'I':1}
-    sum = 0
-    for i in range(len(input)):
-        value = nums[input[i]]
-        # If the next place holds a larger number, this value is negative
-        if i+1 < len(input) and nums[input[i+1]] > value:
-            sum -= value
-        else: sum += value
-    if int_to_roman(sum) == input:
-        return sum 
-    else:
-        raise ValueError( "'{}' not a valid roman number".format(input) )
-
-
-# ----------------------------------------------------------------------
 import sys, ply.lex, datetime
+
+#states = (('COMMENT', 'exclusive'),)
 
 keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
             'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
-tokens = keywords + ( #'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-            'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
+tokens = keywords + ( 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
            'STRING_LITERAL', 'varIDENT', 'funcIDENT')
 
 ##tokens definition
-
-
 # non-tokens
 
 #** empty space, tabulator(\t) and newline(\n)/linefeed(\r)
 #are accepted but ignored in the input (for each newline
 #keep a line count to get better error messages) **
 def t_WHITESPACE(t):
-    r'[ \t\n\r]'
+    r' \r\t\n'
     t.lexer.lineno += t.value.count('\n')
-
+    pass
 
 #** anything between square brackets [ ]
 #are accepted but ignored **
 def t_COMMENT(t):
-    r'\[(.|\n)*\]'
+    r'\[(.|\n^\]^\[)*\]'
     t.lexer.lineno += t.value.count('\n')
+
+#def t_COMMENT(t):
+#    r'\['
+#    t.lexer.code_start = t.lexer.lexpos
+#    t.lexer.level = 1
+#
+    #print(str(t.lexer.level) + "quiiii")
+#    t.lexer.begin('COMMENT')
+#    pass
+
+#def t_COMMENT_lbrace(t):
+#    r'\['
+#    t.lexer.level +=1
+    #print(t.lexer.level +"quiiii")
+
+#def t_COMMENT__rbrace(t):
+#    r'\]'
+#    t.lexer.level -= 1
+#    if t.lexer.level == 0:
+        #
+        #t.type ='comment'
+#        t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
+#        t.lexer.lineno += t.value.count('\n')
+#        t.lexer.begin('INITIAL')
+        #return t
+    #print(t.lexer.level)
+#    pass
 
 
 # reserved words (each identified as a token) are:
@@ -107,7 +88,7 @@ t_LTEQ  = r'<='
 t_GT    = r'>'
 t_GTEQ  = r'>='
 t_PLUS  = r'\+'
-t_MINUS = r'\-'
+t_MINUS = r'-'
 t_MULT  = r'\*'
 t_DIV   = r'/'
 
@@ -136,6 +117,7 @@ def t_NUMBER_LITERAL(t):
 #quotation marks.  E.g.  "merkkijono" **
 def t_STRING_LITERAL(t):
     r'\".*?\"'
+    t.lexer.lineno += t.value.count('\n')
     t.value = t.value.replace('"', '')
     return t
 
@@ -156,28 +138,30 @@ t_funcIDENT = r'[A-Z][a-z0-9_]+'
 
 ##tokens definition end
 
-#t_PUSH = r'⇑'
-#t_POP  = r'⇓'
-#t_SWAP = r'↔'
-#t_ADD  = r'⊕'
-#t_SUB  = r'⊖'
-#t_PRINT= r'ψ'
+#def t_COMMENT_string(t):
+#    r'\w'
+#    print("porco dio")
+#    pass
 
-#def t_ROMAN(t):
-#    r'[MDCLXVI]+'  # valid chars for a roman number, can be invalid format
-#    t.value = roman_to_int( t.value )
-#    return t
+#def t_COMMENT_content(t):
+#    r'(.|\n^\]^\[)+'
+#    #r'^[^\[\[]+'
+#    t.lexer.lineno += t.value.count('\n')
+    #print(t.value)
+    #r'^[^\[\[]+'
+    #r'[^\[^\[]+'
+    #r'^[^\[\]]+'
+#    pass
 
-# count line number we are processing
-#def t_EOL(t):
-#    r'↵'
-#    t.lexer.lineno += 1
+#t_COMMENT_ignore = r' \t'
 
-#t_ignore = '⍽\n'
-
+#def t_COMMENT_error(t):
+    #raise Exception("Illegal character '{}' at line {}".format(
+    #    t.value[0], t.lexer.lineno ) )
+#    t.lexer.skip(1)
 def t_error(t):
-    raise Exception("Illegal character '{}' at line {}".format( 
-        t.value[0], t.lexer.lineno ) )
+    raise Exception("Illegal character '{}' at line {}".format(t.value[0], t.lexer.lineno ) )
+    #t.lexer.skip(1)
 
 # define lexer in module level so it can be used after 
 # importing this module:
@@ -198,6 +182,7 @@ if __name__ == '__main__':
         print( '85471 Jyke Savia' )
         print( '88888 Ahto Simakuutio' )
         print( '------ Joonas Jäppinen')
+        print( '262767 Pino Surace')
     elif ns.file is None:
         # user didn't provide input filename
         parser.print_help()
