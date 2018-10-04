@@ -42,6 +42,8 @@ def t_COMMENT(t):
     t.lexer.lineno += t.value.count('\n')
 
 
+
+
 # reserved words (each identified as a token) are:
 #VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
 #FUNCTION, RETURN, END
@@ -86,11 +88,12 @@ t_DIV   = r'/'
 #followed by two digits followed by minus followed by
 #two digits. E.g. 2018-09-27 ***
 def t_DAY_LITERAL(t):
-    r'\d\d\d\d-\d\d-\d\d'
-    date = t.value.split("-")
-    t.value = datetime.date(int(date[0]), int(date[1]), int(date[2]))
-    #t.value = date.isoformat()
-    return t
+    r'\d\d\d\d-\d\d-\d\d(?!\d)' #ask if it is followed by other things what should happen
+    try:
+        t.value = datetime.datetime.strptime( t.value, '%Y-%m-%d').date()
+        return t
+    except ValueError:
+        raise Exception("Illegal date format at line '{}'".format( t.lexer.lineno))
 
 
 #** one or more numerical digits **
