@@ -1,13 +1,26 @@
 #!/usr/bin/env python3
 import sys, ply.lex, datetime
 
-keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
-            'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
-tokens = keywords + ( #'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'EOL', \
-            'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
+reserved = {
+    'VAR' : 'VAR',
+    'IS' : 'IS',
+    'IF' : 'IF',
+    'THEN' : 'THEN',
+    'ELSE' : 'ELSE',
+    'ENDIF' : 'ENDIF',
+    'WHILE' : 'WHILE',
+    'DO' : 'DO',
+    'ENDWHILE' : 'ENDWHILE',
+    'FUNCTION' : 'FUNCTION',
+    'RETURN' : 'RETURN'
+}
+
+#keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
+#            'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
+tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT')
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID'] + list(reserved.values())
 
 ##tokens definition
 
@@ -18,7 +31,7 @@ tokens = keywords + ( #'PUSH', 'POP', 'SWAP', 'ADD', 'SUB', 'PRINT', 'ROMAN', 'E
 #are accepted but ignored in the input (for each newline
 #keep a line count to get better error messages) **
 def t_WHITESPACE(t):
-    r'[ \t\n\r]'
+    r'[ \t\n\r]+'
     t.lexer.lineno += t.value.count('\n')
 
 
@@ -32,17 +45,17 @@ def t_COMMENT(t):
 # reserved words (each identified as a token) are:
 #VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
 #FUNCTION, RETURN, END
-t_VAR = r'VAR'
-t_IS  = r'IS'
-t_IF  = r'IF'
-t_THEN = r'THEN'
-t_ELSE = r'ELSE'
-t_ENDIF = r'ENDIF'
-t_WHILE = r'WHILE'
-t_DO    = r'DO'
-t_FUNCTION = r'FUNCTION'
-t_RETURN = r'RETURN'
-t_END = r'END'
+#t_VAR = r'VAR'
+#t_IS  = r'IS'
+#t_IF  = r'IF'
+#t_THEN = r'THEN'
+#t_ELSE = r'ELSE'
+#t_ENDIF = r'ENDIF'
+#t_WHILE = r'WHILE'
+#t_DO    = r'DO'
+#t_FUNCTION = r'FUNCTION'
+#t_RETURN = r'RETURN'
+#t_END = r'END'
 
 
 # one and two letter tokens:
@@ -109,17 +122,24 @@ t_varIDENT = r'[a-z]\w+\?{0,1}'
 #Foo, J00, S_o_m_e **
 t_funcIDENT = r'[A-Z][a-z0-9_]+'
 
+def t_ID(t):
+    r'[A-Z][A-Z]+'
+    t.type = reserved.get(t.value)    # Check for reserved words
+    if t.type == None:
+        t_error(t)
+    else:
+        return t
+
 ##tokens definition end
 
 
 
 def t_error(t):
-    raise Exception("Illegal character '{}' at line {}".format( 
-        t.value[0], t.lexer.lineno ) )
+    raise Exception("Illegal character '{}' at line {}".format( t.value[0], t.lexer.lineno ) )
 
 # define lexer in module level so it can be used after 
 # importing this module:
-lexer = ply.lex.lex()
+lexer = ply.lex.lex(debug = 0)
 
 # if this module/file is the first one started (the main module)
 # then run:
