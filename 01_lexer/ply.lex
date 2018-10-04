@@ -159,6 +159,7 @@ if __name__ == '__main__':
         print( '85471 Jyke Savia' )
         print( '88888 Ahto Simakuutio' )
         print( '------ Joonas Jäppinen')
+        print('262767 Pino Surace')
     elif ns.file is None:
         # user didn't provide input filename
         parser.print_help()
