@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import sys, ply.lex, datetime
 
+states = (
+  ('COMMENT','exclusive'),
+)
+
 # reserved words (each identified as a token) are:
 reserved = {
     'VAR' : 'VAR',
@@ -24,6 +28,49 @@ tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE',
 
 ##tokens definition
 
+#nested comments
+def t_COMMENT(t):
+    r'\['
+    t.lexer.code_start = t.lexer.lexpos
+    t.lexer.level = 1
+    print(t.lexer.level)
+    t.lexer.begin('COMMENT')
+
+
+def t_COMMENT_LBRACKET(t):
+    r'\['
+    t.lexer.level +=1
+    print(t.lexer.level)
+
+def t_COMMENT_RBRACKET(t):
+    r'\]'
+    t.lexer.level -=1
+    print(t.lexer.level)
+    # If closing brace, return the code fragment
+    if t.lexer.level == 0:
+         t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
+         #t.type = "CCODE"
+         t.lexer.lineno += t.value.count('\n')
+         t.lexer.begin('INITIAL')
+         #return t
+
+
+def t_COMMENT_CONTENT(t):
+    r'[^\[\]]+'
+    #r'(.|\n)+'
+    print(t.lexer.level)
+    pass
+
+
+def t_COMMENT_eof(t):
+    if t.lexer.level != 0:
+        raise Exception("Parentesis are not balanced at line {}".format( t.lexer.lineno))
+
+
+#nested comments end
+
+
+
 
 # non-tokens
 
@@ -37,9 +84,9 @@ def t_WHITESPACE(t):
 
 #** anything between square brackets [ ]
 #are accepted but ignored **
-def t_COMMENT(t):
-    r'\[(.|\n)*?\]'
-    t.lexer.lineno += t.value.count('\n')
+#def t_COMMENT(t):
+#    r'\[(.|\n)*?\]'
+#    t.lexer.lineno += t.value.count('\n')
 
 
 
