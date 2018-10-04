@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys, ply.lex, datetime
 
+# reserved words (each identified as a token) are:
 reserved = {
     'VAR' : 'VAR',
     'IS' : 'IS',
@@ -15,8 +16,7 @@ reserved = {
     'RETURN' : 'RETURN'
 }
 
-#keywords = ('VAR', 'IS', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', \
-#            'ENDWHILE', 'FUNCTION', 'RETURN', 'END')
+#tokens list
 tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
@@ -38,7 +38,7 @@ def t_WHITESPACE(t):
 #** anything between square brackets [ ]
 #are accepted but ignored **
 def t_COMMENT(t):
-    r'\[(.|\n)*\]'
+    r'\[(.|\n)*?\]'
     t.lexer.lineno += t.value.count('\n')
 
 
@@ -139,7 +139,7 @@ def t_error(t):
 
 # define lexer in module level so it can be used after 
 # importing this module:
-lexer = ply.lex.lex(debug = 0)
+lexer = ply.lex.lex(debug = 1)
 
 # if this module/file is the first one started (the main module)
 # then run:
