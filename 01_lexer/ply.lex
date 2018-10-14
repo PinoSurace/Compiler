@@ -90,23 +90,6 @@ def t_WHITESPACE(t):
 
 
 
-
-# reserved words (each identified as a token) are:
-#VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
-#FUNCTION, RETURN, END
-#t_VAR = r'VAR'
-#t_IS  = r'IS'
-#t_IF  = r'IF'
-#t_THEN = r'THEN'
-#t_ELSE = r'ELSE'
-#t_ENDIF = r'ENDIF'
-#t_WHILE = r'WHILE'
-#t_DO    = r'DO'
-#t_FUNCTION = r'FUNCTION'
-#t_RETURN = r'RETURN'
-#t_END = r'END'
-
-
 # one and two letter tokens:
 t_LARROW = r'<-'
 t_RARROW = r'->'
@@ -213,8 +196,7 @@ if __name__ == '__main__':
     else:
         # using codecs to make sure we process unicode
         with codecs.open( ns.file, 'r', encoding='utf-8' ) as INFILE:
-            # blindly read all to memory (what if that is a 42Gb file?)
-            # TODO: limit the file size to 100MB?
+            
             data = INFILE.read() 
 
         lexer.input( data )
