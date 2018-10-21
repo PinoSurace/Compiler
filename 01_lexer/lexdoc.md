@@ -1,62 +1,98 @@
-Version: 1.0v (Joonas)
+1. What is lexical analysis and how is it related to other parts in compilation? 
 
-Version control: major_edit.minor_edit (editor)
+Lexical analysis is the process of the parsing through the code file and it’s lines of the code. The compilation is done after lexical analysis when the comments and other stuff are parsed away. 
 
-In addition to the lexer code, the group submits a text document in either plain text (.txt), markdown (.md) or pdf (.pdf) format. It should contain answers to the following questions (again, in the groups own words, no copying from other sources):
+2. How is the lexical structure of the language expressed in the PLY tool? I.e., what parts are needed in the code and how are they related to lexical rules of the language? 
 
-1. What is lexical analysis and how is it related to other parts in compilation?
-Lexical analysis is the part of the process being compiled. The analysis is done after preprocessing of the code (after removal of the whitespaces and any comments). The code (text) is processed and the different words are checked against predefined tokens. Other parts of the compilation can only be done after lexical analysis (partly because before lexical analysis, there is no idea what the programmer has coded).
+The needed parts are the  rules (simple or complex) that matches some regex and represent a token defined in the token list. Moreover if a matched regex is not a token then an error is raised.
 
-2. How is the lexical structure of the language expressed in the PLY tool? I.e., what parts are needed in the code and how are they related to lexical rules of the language?
-TODO: The lexical structure of the language is being expressed ...
+3. Explain how the following are recognized and handled in your code: 
+ a) Keywords 
 
-
-3. Explain how the following are recognized and handled in your code:
-        Keywords
-	The keywords are first parsed from the code and later added to a list.
-
-	Comments
-	The comments are removed befored the lexical analysis
-
-        Whitespace between tokens
-	Whitespace is removed by splitting code lines by whitespace characters and checking the contains of the indexes.
-
-        Operators & delimiters (<-, parenthesis, etc.)
-	Currently no plan.
-
-        Date literals
-	Date literals are being checked against DD.MM.YYYY, MM.DD.YYYY and YYYY.MM.DD format.
-
-        Integer literals
-	Integer literals contain only numbers as characters and are not floats.
-	
-        String literals
-	String literals contain any characters.
-	
-        Function and variable names 
-	Function names have before the name def (shortened from definition). Variables do not have def written and have equal sign '=' after 		the name. 
-	
-4. How can the lexer distinguish between the following lexical elements:
-	Function names & variable names
-	Function names have def before them. Function names end before white space. Variable names do not have def written before them.
-
-        Integer literals & date literals
-	Integer are inputted containing no whitespaces nor anything else. Date literals can contain dots (.) or slashes (/).
-
-        Keywords & function names
-	TODO
-
-        Operators < (less than) & <= (less or equal)
-	TODO
-
-        String literals & variables names
-	TODO
+Keywords are recognized in the rule t_ID .  If the regex matches more than two consecutive uppercase characters, then it checks if the matched word is in the reserved list (where all the keywords are stored)  and if yes returns the token , otherwise returns an error 
  
-        Comments & other code 
-	TODO	
+b) Comments 
 
-5. Did you implement any extras? If so explain them (what and how)
-TODO: We implemented feature(s) X(s).
+Comments are checked using the t_COMMENT rule, that matches code betweed square brackets [ ] and returns the corresponding token. More about this is explained in the part regarding extras. 
 
-6. What did you think of this assignment? What was difficult? What was easy? Did you learn anything useful?
-The assignment was very usefull and improved Python skills even further. The tasks were not difficult nor easy but well educating. The most usefull part was the handling of different tokens. 
+Multiline and nested comments are also checked, so the basic case is handled in them. 
+ 
+c) Whitespace between tokens 
+
+Whitespaces are all matched in the rule t_WHITESPACE, and if the character is equal to “\n”, the current line is updated. Nothing is returned. 
+ 
+d) Operators & delimiters (<-, parenthesis, etc.) 
+
+Operators & delimiters are matched as simple tokens, so if the exact string is matched then they return the corresponding code. There are not problems to handle “<-” respect to “<”, because simple tokens are automatically sorted by ply, where the longest regex are checked first. 
+ 
+e) Date literals 
+
+Date literals are recognized by the rule t_DAY_LITERAL. Then the string matched is transformed in date and checks on its value are done using the function strptime. If the value is correct then it returns the corresponding token, otherwise it returns an error 
+ 
+f) Integer literals 
+
+Integer literals are recognized by the simple rule t_NUMBER_LITERAL, that matches a sequence of numbers and transform it in integers, returning the corresponding token. 
+ 
+g) String literals 
+
+String literals are recognized using the rule  t_STRING_LITERAL, that matches characters between two double quotes. The  double quotes are removed using the replace method, and the corresponding token is returned. 
+ 
+h) Function and variable names 
+
+Function names are recognized using the rule t_funcIDENT, that matches the characters corresponding to it and returns the corresponding token. 
+
+Variable names are recognized using the rule t_varIDENT, that matches the characters corresponding to it and returns the corresponding token. 
+
+4. How can the lexer distinguish between the following lexical elements: 
+a) Function names & variable names 
+
+Function names start with an uppercase letter (A-Z), instead variable names start with a lowercase letter (a-z) 
+ 
+b) Integer literals & date literals 
+
+Integers are represented as a sequence of integers. Date literals are in the exact form where there are 4 integers followed by (-)  followed by 2 integers, followed by (-), followed by two integers. 
+ 
+c) Keywords & function names 
+
+Keywords are represented as words composed by 2 to 8 uppercase characters, instead in the functions only the first character can be uppercase. 
+ 
+d) Operators < (less than) & <= (less or equal) 
+
+PLY sorts the simple tokens so that longest regex are checked first. In this way “<=” is checked before “<”; so if there is not “= ”after “<”, then only “<” is matched. 
+ 
+e) String literals & variables names 
+
+String literals are represented inside vertical double quotation marks, instead variables name cannot start or end with a double quotation mark. 
+ 
+f) Comments & other code 
+
+Comments are represented between square brackets ([ ]) and the other code is not. 
+
+5. Did you implement any extras? If so explain them (what and how) 
+a) Implement comment in a way that it can span multiple lines. 
+
+This has been done matching the “\n” character inside the brackets “[]” 
+ 
+b) Accept nested comments ( [ start [ inside ] out again ] )
+
+This has been implemented using an exclusive state called COMMENT. 
+
+It starts when the first “\[” is matched and there is a variable that keeps memory of the balance between brackets (t.lexer.level): when this variable is equal to zero, that means brackets are balanced and it has matched nested comments, otherwise if the end of the file is matched, then it means that the brackets are not balanced, so it gives an error. 
+ 
+c) Verify that the token recognized as DAY is an actual date. 
+
+This has been done using the following line of code: 
+
+datetime.datetime.strptime( t.value, '%Y-%m-%d').date() 
+
+The function strptime checks if the input is in the isoformat and if the date is not valid it gives an error 
+
+6. What did you think of this assignment? What was difficult? What was easy? Did you learn anything useful? 
+
+This assignment was very interesting and not too difficult. I think it helped a lot to understand deeply lexical analysis. 
+
+ 
+
+ 
+
+ 
