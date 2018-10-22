@@ -8,29 +8,38 @@ I⇑⍽XI⇑⍽↔⍽⊖⍽ψ⍽↵
 '''
 # ----------------------------------------------------------------------
 from ply import yacc
-import calc_lex # previous phase example snippet code
+import ply.lex # previous phase example snippet code
 
 # tokens are defined in lex-module, but needed here also in syntax rules
-tokens = calc_lex.tokens
+tokens = ply.lex.tokens
 
 # any funcion starting with 'p_' is PLY yacc rule
 # first definition is the target we want to reduce
 # in other words: after processing all input tokens, if this start-symbol
 # is the only one left, we do not have any syntax errors
+
+#program ::= codeitem { codeitem }
 def p_program(p):
-    '''program : statement
-               | program statement'''
+    '''program : codeitem
+               | program codeitem'''
     print( 'program' )
 
+#codeitem ::= var_definition | func_definition | statement_seq
+def p_codeitem(p):
+    '''codeitem : var_definition
+                | func_definition
+                | statement_seq'''
+    print( 'codeitem' )
 
-# statement can be applied to number or standalone
-def p_statement(p):
-    '''statement : ROMAN unary_op
-                 | single_op'''
-    if len(p) == 3:
-        print( 'statement with ROMAN(', p[1], ')' )
-    else:
-        print( 'statement' )
+#var_definition ::= VAR varIDENT IS expr SEMICOLON
+def p_var_definition(p):
+    '''var_definition : VAR varIDENT IS expr SEMICOLON'''
+    print( 'var_definition' )
+
+#var_definition ::= VAR varIDENT IS expr SEMICOLON
+def p_var_definition(p):
+    '''var_definition : VAR varIDENT IS expr SEMICOLON'''
+    print( 'var_definition' )
 
 def p_unary_op(p):
     '''unary_op : PUSH'''
