@@ -7,24 +7,56 @@ states = (
 
 # reserved words (each identified as a token) are:
 reserved = {
-    'VAR' : 'VAR',
-    'IS' : 'IS',
-    'IF' : 'IF',
-    'THEN' : 'THEN',
-    'ELSE' : 'ELSE',
-    'ENDIF' : 'ENDIF',
-    'WHILE' : 'WHILE',
+    'FALSE': 'FALSE',
+    'NONE': 'NONE',
+    'TRUE': 'TRUE',
+    'AND' : 'AND',
+    'AS' : 'AS',
+    'ASSERT' : 'ASSERT',
+    'ASYNC': 'ASYNC',
+    'AWAIT': 'AWAIT',
+    'BREAK': 'BREAK',
+    'CLASS': 'CLASS',
+    'CONTINUE': 'CONTINUE',
+    'DEF': 'DEF',
+    'DEL': 'DEL',
     'DO' : 'DO',
+    'ELIF' : 'ELIF',
+    'ELSE' : 'ELSE',
+    'END' : 'END',
+    'ENDIF' : 'ENDIF',
     'ENDWHILE' : 'ENDWHILE',
+    'EXCEPT' : 'EXCEPT',
+    'FINALLY' : 'FINALLY',
+    'FOR': 'FOR',
+    'FROM': 'FROM',
     'FUNCTION' : 'FUNCTION',
-    'RETURN' : 'RETURN'
+    'GLOBAL': 'GLOBAL',
+    'IF' : 'IF',
+    'IMPORT': 'IMPORT',
+    'IN': 'IN',
+    'IS' : 'IS',
+    'LAMBDA': 'LAMBDA',
+    'NONLOCAL': 'NONLOCAL',
+    'NOT': 'NOT',
+    'OR': 'OR',
+    'PASS': 'PASS',
+    'RAISE': 'RAISE',
+    'RETURN' : 'RETURN',
+    'THEN' : 'THEN',
+    'TRY' : 'TRY',
+    'WHILE' : 'WHILE',
+    'WITH': 'WITH',
+    'VAR': 'VAR',
+    'YIELD': 'YIELD'
+
 }
 
 #tokens list
 tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID'] + list(reserved.values())
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID', 'END'] + list(reserved.values())
 
 ##tokens definition
 
@@ -33,34 +65,44 @@ def t_COMMENT(t):
     r'\['
     t.lexer.code_start = t.lexer.lexpos
     t.lexer.level = 1
+    #print(t.lexer.level)
     t.lexer.begin('COMMENT')
+    if(t.lexer.level != 1):
+        t_COMMENT_eof()
 
 
 def t_COMMENT_LBRACKET(t):
     r'\['
     t.lexer.level +=1
-
+    #print(t.lexer.level)
 
 def t_COMMENT_RBRACKET(t):
     r'\]'
     t.lexer.level -=1
-
-
+    #print(t.lexer.level)
+    # If closing brace, return the code fragment
     if t.lexer.level == 0:
          t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
+         #t.type = "CCODE"
          t.lexer.lineno += t.value.count('\n')
          t.lexer.begin('INITIAL')
-
+         #return t
 
 
 def t_COMMENT_CONTENT(t):
     r'[^\[\]]+'
+    #r'(.|\n)+'
+    #print(t.lexer.level)
     pass
 
 
 def t_COMMENT_eof(t):
     if t.lexer.level != 0:
         raise Exception("Parentesis are not balanced at line {}".format( t.lexer.lineno))
+
+def t_COMMENT_error(t):
+    if t.lexer.level != 0:
+        raise Exception("Parentesis are not balanced at line {}".format(t.lexer.lineno))
 
 
 #nested comments end
@@ -77,6 +119,12 @@ def t_WHITESPACE(t):
     r'[ \t\n\r]+'
     t.lexer.lineno += t.value.count('\n')
 
+
+#** anything between square brackets [ ]
+#are accepted but ignored **
+#def t_COMMENT(t):
+#    r'\[(.|\n)*?\]'
+#    t.lexer.lineno += t.value.count('\n')
 
 
 
@@ -108,7 +156,7 @@ t_DIV   = r'/'
 #followed by two digits followed by minus followed by
 #two digits. E.g. 2018-09-27 ***
 def t_DAY_LITERAL(t):
-    r'\d\d\d\d-\d\d-\d\d(?!\d)'
+    r'\d\d\d\d-\d\d-\d\d(?!\d)' #ask if it is followed by other things what should happen
     try:
         t.value = datetime.datetime.strptime( t.value, '%Y-%m-%d').date()
         return t
@@ -153,8 +201,6 @@ def t_ID(t):
     else:
         return t
 
-##tokens definition end
-
 
 
 def t_error(t):
@@ -162,7 +208,7 @@ def t_error(t):
 
 # define lexer in module level so it can be used after 
 # importing this module:
-lexer = ply.lex.lex(debug = 0)
+lexer = ply.lex.lex(debug = 1)
 
 # if this module/file is the first one started (the main module)
 # then run:
@@ -176,7 +222,9 @@ if __name__ == '__main__':
     ns = parser.parse_args()
     if ns.who == True:
         # identify who wrote this
-        print( '------ Joonas Jäppinen')
+        print( '85471 Jyke Savia' )
+        print( '88888 Ahto Simakuutio' )
+        print( '246258 Joonas Jäppinen')
         print('262767 Pino Surace')
     elif ns.file is None:
         # user didn't provide input filename
@@ -184,9 +232,7 @@ if __name__ == '__main__':
     else:
         # using codecs to make sure we process unicode
         with codecs.open( ns.file, 'r', encoding='utf-8' ) as INFILE:
-            # blindly read all to memory (what if that is a 42Gb file?)
-            # TODO: limit the file size to 100MB?
-
+            
             data = INFILE.read() 
 
         lexer.input( data )
