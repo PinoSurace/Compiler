@@ -7,24 +7,56 @@ states = (
 
 # reserved words (each identified as a token) are:
 reserved = {
-    'VAR' : 'VAR',
-    'IS' : 'IS',
-    'IF' : 'IF',
-    'THEN' : 'THEN',
-    'ELSE' : 'ELSE',
-    'ENDIF' : 'ENDIF',
-    'WHILE' : 'WHILE',
+    'FALSE': 'FALSE',
+    'NONE': 'NONE',
+    'TRUE': 'TRUE',
+    'AND' : 'AND',
+    'AS' : 'AS',
+    'ASSERT' : 'ASSERT',
+    'ASYNC': 'ASYNC',
+    'AWAIT': 'AWAIT',
+    'BREAK': 'BREAK',
+    'CLASS': 'CLASS',
+    'CONTINUE': 'CONTINUE',
+    'DEF': 'DEF',
+    'DEL': 'DEL',
     'DO' : 'DO',
+    'ELIF' : 'ELIF',
+    'ELSE' : 'ELSE',
+    'END' : 'END',
+    'ENDIF' : 'ENDIF',
     'ENDWHILE' : 'ENDWHILE',
+    'EXCEPT' : 'EXCEPT',
+    'FINALLY' : 'FINALLY',
+    'FOR': 'FOR',
+    'FROM': 'FROM',
     'FUNCTION' : 'FUNCTION',
-    'RETURN' : 'RETURN'
+    'GLOBAL': 'GLOBAL',
+    'IF' : 'IF',
+    'IMPORT': 'IMPORT',
+    'IN': 'IN',
+    'IS' : 'IS',
+    'LAMBDA': 'LAMBDA',
+    'NONLOCAL': 'NONLOCAL',
+    'NOT': 'NOT',
+    'OR': 'OR',
+    'PASS': 'PASS',
+    'RAISE': 'RAISE',
+    'RETURN' : 'RETURN',
+    'THEN' : 'THEN',
+    'TRY' : 'TRY',
+    'WHILE' : 'WHILE',
+    'WITH': 'WITH',
+    'VAR': 'VAR',
+    'YIELD': 'YIELD'
+
 }
 
 #tokens list
 tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID'] + list(reserved.values())
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID', 'END'] + list(reserved.values())
 
 ##tokens definition
 
@@ -33,19 +65,21 @@ def t_COMMENT(t):
     r'\['
     t.lexer.code_start = t.lexer.lexpos
     t.lexer.level = 1
-    print(t.lexer.level)
+    #print(t.lexer.level)
     t.lexer.begin('COMMENT')
+    if(t.lexer.level != 1):
+        t_COMMENT_eof()
 
 
 def t_COMMENT_LBRACKET(t):
     r'\['
     t.lexer.level +=1
-    print(t.lexer.level)
+    #print(t.lexer.level)
 
 def t_COMMENT_RBRACKET(t):
     r'\]'
     t.lexer.level -=1
-    print(t.lexer.level)
+    #print(t.lexer.level)
     # If closing brace, return the code fragment
     if t.lexer.level == 0:
          t.value = t.lexer.lexdata[t.lexer.code_start:t.lexer.lexpos+1]
@@ -58,13 +92,17 @@ def t_COMMENT_RBRACKET(t):
 def t_COMMENT_CONTENT(t):
     r'[^\[\]]+'
     #r'(.|\n)+'
-    print(t.lexer.level)
+    #print(t.lexer.level)
     pass
 
 
 def t_COMMENT_eof(t):
     if t.lexer.level != 0:
         raise Exception("Parentesis are not balanced at line {}".format( t.lexer.lineno))
+
+def t_COMMENT_error(t):
+    if t.lexer.level != 0:
+        raise Exception("Parentesis are not balanced at line {}".format(t.lexer.lineno))
 
 
 #nested comments end
@@ -88,23 +126,6 @@ def t_WHITESPACE(t):
 #    r'\[(.|\n)*?\]'
 #    t.lexer.lineno += t.value.count('\n')
 
-
-
-
-# reserved words (each identified as a token) are:
-#VAR, IS, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE,
-#FUNCTION, RETURN, END
-#t_VAR = r'VAR'
-#t_IS  = r'IS'
-#t_IF  = r'IF'
-#t_THEN = r'THEN'
-#t_ELSE = r'ELSE'
-#t_ENDIF = r'ENDIF'
-#t_WHILE = r'WHILE'
-#t_DO    = r'DO'
-#t_FUNCTION = r'FUNCTION'
-#t_RETURN = r'RETURN'
-#t_END = r'END'
 
 
 # one and two letter tokens:
@@ -180,8 +201,6 @@ def t_ID(t):
     else:
         return t
 
-##tokens definition end
-
 
 
 def t_error(t):
@@ -205,7 +224,7 @@ if __name__ == '__main__':
         # identify who wrote this
         print( '85471 Jyke Savia' )
         print( '88888 Ahto Simakuutio' )
-        print( '------ Joonas Jäppinen')
+        print( '246258 Joonas Jäppinen')
         print('262767 Pino Surace')
     elif ns.file is None:
         # user didn't provide input filename
@@ -213,8 +232,7 @@ if __name__ == '__main__':
     else:
         # using codecs to make sure we process unicode
         with codecs.open( ns.file, 'r', encoding='utf-8' ) as INFILE:
-            # blindly read all to memory (what if that is a 42Gb file?)
-            # TODO: limit the file size to 100MB?
+            
             data = INFILE.read() 
 
         lexer.input( data )
