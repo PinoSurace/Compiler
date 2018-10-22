@@ -36,10 +36,17 @@ def p_var_definition(p):
     '''var_definition : VAR varIDENT IS expr SEMICOLON'''
     print( 'var_definition' )
 
-#var_definition ::= VAR varIDENT IS expr SEMICOLON
-def p_var_definition(p):
-    '''var_definition : VAR varIDENT IS expr SEMICOLON'''
-    print( 'var_definition' )
+#func_definition ::= FUNCTION funcIDENT LPAREN [ formals ] RPAREN fbody
+def p_func_definition(p):
+    '''func_definition : FUNCTION funcIDENT LPAREN formals RPAREN fbody
+                       | FUNCTION funcIDENT LPAREN empty RPAREN fbody'''
+    print( 'func_definition' )
+
+
+def p_empty(p):
+    'empty :'
+    pass
+
 
 def p_unary_op(p):
     '''unary_op : PUSH'''
