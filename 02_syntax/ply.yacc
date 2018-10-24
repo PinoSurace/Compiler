@@ -42,6 +42,65 @@ def p_func_definition(p):
                        | FUNCTION funcIDENT LPAREN empty RPAREN fbody'''
     print( 'func_definition' )
 
+#formals ::= varIDENT { COMMA varIDENT }
+def p_formals(p):
+    '''formals : varIDENT
+               | varIDENT COMMA varIDENT
+               | formals COMMA varIDENT'''
+    print( 'formals' )
+
+#fbody ::= RARROW statement_seq END SEMICOLON
+def p_fbody(p):
+    '''fbody : RARROW statement_seq END SEMICOLON'''
+    print( 'fbody' )
+
+#statement_seq ::= statement SEMICOLON { statement SEMICOLON }
+def p_statement_seq(p):
+    '''statement_seq : statement SEMICOLON
+                     | statement_seq statement SEMICOLON'''
+    print( 'statement_seq' )
+
+
+#statement ::= assignment | return_statement | **if_statement**
+#            | **while_statement** | **function_call**
+def p_statement(p):
+    '''statement : assignment
+                 | return_statement
+                 | if_statement
+                 | while_statement
+                 | function_call'''
+    print( 'statement' )
+
+#return_statement ::= RETURN expr
+def p_return_statement(p):
+    '''return_statement : RETURN expr'''
+    print( 'return_statement' )
+
+#assignment ::= varIDENT [ DOT varIDENT ] LARROW expr
+def p_assignment(p):
+    '''assignment : varIDENT DOT varIDENT LARROW expr
+                  | varIDENT empty LARROW expr'''
+    print( 'assignment' )
+
+#expr ::= simple_expr [ ( EQ | NOTEQ | LT | LTEQ | GT | GTEQ ) simple_expr ]
+def p_expr(p):
+    '''expr : simple_expr
+            | simple_expr EQ simple_expr
+            | simple_expr NOTEQ simple_expr
+            | simple_expr LT simple_expr
+            | simple_expr LTEQ simple_expr
+            | simple_expr GT simple_expr
+            | simple_expr GTEQ simple_expr'''
+    print( 'expr' )
+
+#simple_expr ::= term { ( PLUS | MINUS ) term }
+def p_simple_expr(p):
+    '''simple_expr : term
+                   | term PLUS term
+                   | term MINUS term
+                   | simple_expr PLUS term
+                   | simple_expr MINUS term'''
+    print( 'simple_expr' )
 
 def p_empty(p):
     'empty :'
