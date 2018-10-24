@@ -1,0 +1,44 @@
+function_call
+atom
+factor
+term
+atom( 2018-12-06 )
+factor
+term
+expr
+atom( 1 )
+factor
+term
+expr
+return_statement
+statement_seq
+atom( 0 )
+factor
+term
+expr
+return_statement
+statement_seq
+if_statement
+statement_seq
+func_definition( Something )
+function_call
+atom
+factor
+term
+atom( arg )
+factor
+term
+expr
+return_statement
+statement_seq
+func_definition( Foo )
+atom( arg1 )
+factor
+term
+atom( arg2 )
+factor
+term
+expr
+return_statement
+statement_seq
+func_definition( Two_args )

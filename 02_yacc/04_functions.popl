@@ -1,0 +1,13 @@
+FUNCTION Something() ->
+  IF Today = 2018-12-06 THEN
+    RETURN 1;
+  ELSE
+    RETURN 0;
+  ENDIF;
+END;
+FUNCTION Foo( arg ) ->
+  RETURN Something + arg;
+END;
+FUNCTION Two_args( arg1, arg2 ) ->
+  RETURN arg1 + arg2;
+END;

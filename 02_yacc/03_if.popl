@@ -1,0 +1,16 @@
+IF var THEN
+  Print("ok");
+ENDIF;
+
+IF ( var + 7 ) < -var*9 THEN Do; ELSE Something; ENDIF;
+
+[ this does not nest correctly ]
+IF var THEN
+  Print;
+  IF var * -1 THEN
+    Do;
+  ELSE
+    Something;
+ELSE
+  Print("error");
+ENDIF;
