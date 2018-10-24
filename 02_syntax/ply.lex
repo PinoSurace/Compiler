@@ -7,48 +7,48 @@ states = (
 
 # reserved words (each identified as a token) are:
 reserved = {
-    'FALSE': 'FALSE',
-    'NONE': 'NONE',
-    'TRUE': 'TRUE',
-    'AND' : 'AND',
-    'AS' : 'AS',
-    'ASSERT' : 'ASSERT',
-    'ASYNC': 'ASYNC',
-    'AWAIT': 'AWAIT',
-    'BREAK': 'BREAK',
-    'CLASS': 'CLASS',
-    'CONTINUE': 'CONTINUE',
-    'DEF': 'DEF',
-    'DEL': 'DEL',
+    #'FALSE': 'FALSE',
+    #'NONE': 'NONE',
+    #'TRUE': 'TRUE',
+    #'AND' : 'AND',
+    #'AS' : 'AS',
+    #'ASSERT' : 'ASSERT',
+    #'ASYNC': 'ASYNC',
+    #'AWAIT': 'AWAIT',
+    #'BREAK': 'BREAK',
+    #'CLASS': 'CLASS',
+    #'CONTINUE': 'CONTINUE',
+    #'DEF': 'DEF',
+    #'DEL': 'DEL',
     'DO' : 'DO',
-    'ELIF' : 'ELIF',
+    #'ELIF' : 'ELIF',
     'ELSE' : 'ELSE',
     'END' : 'END',
     'ENDIF' : 'ENDIF',
     'ENDWHILE' : 'ENDWHILE',
-    'EXCEPT' : 'EXCEPT',
-    'FINALLY' : 'FINALLY',
-    'FOR': 'FOR',
-    'FROM': 'FROM',
+    #'EXCEPT' : 'EXCEPT',
+    #'FINALLY' : 'FINALLY',
+    #'FOR': 'FOR',
+    #'FROM': 'FROM',
     'FUNCTION' : 'FUNCTION',
-    'GLOBAL': 'GLOBAL',
+    #'GLOBAL': 'GLOBAL',
     'IF' : 'IF',
-    'IMPORT': 'IMPORT',
-    'IN': 'IN',
+    #'IMPORT': 'IMPORT',
+    #'IN': 'IN',
     'IS' : 'IS',
-    'LAMBDA': 'LAMBDA',
-    'NONLOCAL': 'NONLOCAL',
-    'NOT': 'NOT',
-    'OR': 'OR',
-    'PASS': 'PASS',
-    'RAISE': 'RAISE',
+    #'LAMBDA': 'LAMBDA',
+    #'NONLOCAL': 'NONLOCAL',
+    #'NOT': 'NOT',
+    #'OR': 'OR',
+    #'PASS': 'PASS',
+    #'RAISE': 'RAISE',
     'RETURN' : 'RETURN',
     'THEN' : 'THEN',
-    'TRY' : 'TRY',
+    #'TRY' : 'TRY',
     'WHILE' : 'WHILE',
-    'WITH': 'WITH',
+    #'WITH': 'WITH',
     'VAR': 'VAR',
-    'YIELD': 'YIELD'
+    #'YIELD': 'YIELD'
 
 }
 
@@ -56,7 +56,7 @@ reserved = {
 tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID', 'END'] + list(reserved.values())
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID'] + list(reserved.values())
 
 ##tokens definition
 
@@ -156,7 +156,7 @@ t_DIV   = r'/'
 #followed by two digits followed by minus followed by
 #two digits. E.g. 2018-09-27 ***
 def t_DAY_LITERAL(t):
-    r'\d\d\d\d-\d\d-\d\d(?!\d)' #ask if it is followed by other things what should happen
+    r'\d\d\d\d-\d\d-\d\d(?!\d)'
     try:
         t.value = datetime.datetime.strptime( t.value, '%Y-%m-%d').date()
         return t
