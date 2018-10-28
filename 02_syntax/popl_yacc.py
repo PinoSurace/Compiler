@@ -115,19 +115,25 @@ def p_factor(p):
 #atom ::= NUMBER_LITERAL | DAY_LITERAL | STRING_LITERAL
 #       | varIDENT [ APOSTROPHE varIDENT ]
 #       | **function_call** | LPAREN expr RPAREN
-def p_atom(p):
+def p_atom_1(p):
     '''atom : NUMBER_LITERAL
             | DAY_LITERAL
             | STRING_LITERAL
-            | varIDENT APOSTROPHE varIDENT
-            | varIDENT empty
+            | varIDENT empty'''
+
+    print('atom( ' + str(p[1]) + ' )')
+
+
+def p_atom_2(p):
+    '''atom :  varIDENT APOSTROPHE varIDENT
             | function_call
             | LPAREN expr RPAREN'''
 
-   #if p[1].type in ("NUMBER_LITERAL", "DAY_LITERAL","STRING_LITERAL", "varIDENT" ):
-    print( 'atom( '+str(p[1])+ ' )' )
-    #else:
-        #print('atom')
+    print('atom')
+    
+
+
+
 
 #** function_call ** is either just a function name (funcIDENT) or
 #function name followed by one or more comma-separated argument expressions
