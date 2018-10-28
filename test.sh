@@ -32,13 +32,13 @@ assignment_directory="02_syntax"
 
 # (https://course-gitlab.tut.fi/tie-20306_2018-2019/public-examples/commits/master)
 
-examples_directory="../public-examples/02_yacc"
+examples_directory="02_yacc"
 
 
 
 # Move to main.py directory
 
-cd $assignment_directory
+#cd $assignment_directory
 
 IFS=
 
@@ -70,7 +70,7 @@ do
 
   # Writes python prints to .output file
 
-  echo $(python -u ./popl_yacc.py -f $filename) >> $outputPath
+  echo $(python -u $assignment_directory/popl_yacc.py -f $filename) >> $outputPath
 
 
 
