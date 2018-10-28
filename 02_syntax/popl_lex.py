@@ -208,7 +208,7 @@ def t_error(t):
 
 # define lexer in module level so it can be used after 
 # importing this module:
-lexer = ply.lex.lex(debug = 1)
+lexer = ply.lex.lex()
 
 # if this module/file is the first one started (the main module)
 # then run:
@@ -222,8 +222,6 @@ if __name__ == '__main__':
     ns = parser.parse_args()
     if ns.who == True:
         # identify who wrote this
-        print( '85471 Jyke Savia' )
-        print( '88888 Ahto Simakuutio' )
         print( '246258 Joonas Jäppinen')
         print('262767 Pino Surace')
     elif ns.file is None:

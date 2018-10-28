@@ -190,14 +190,14 @@ if __name__ == '__main__':
     ns = arg_parser.parse_args()
     if ns.who == True:
         # identify who wrote this
-        print( '85471 Jyke Savia' )
-        print( '88888 Ahto Simakuutio' )
+        print('246258 Joonas Jäppinen')
+        print('262767 Pino Surace')
     elif ns.file is None:
         # user didn't provide input filename
         arg_parser.print_help()
     else:
         data = codecs.open( ns.file, encoding='utf-8' ).read()
         result = parser.parse(data, lexer=popl_lex.lexer, debug=False)
-        if result is None:
-            print( 'syntax OK' )
+        #if result is None:
+        #    print( 'syntax OK' )
 
