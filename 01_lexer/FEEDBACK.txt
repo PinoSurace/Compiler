@@ -30,6 +30,8 @@ During handling of the above exception, another exception occurred:
 ...
 Exception: Illegal date format at line '2'
 
+all these things are minor, so
+phase 1 is accepted
 
 
 
