@@ -1,0 +1,35 @@
+small note: it's a bit confusing that you have directories '01_lex' and
+'01_lexer'. If you need extra data, you can create a subdirectory under
+the pre-created submission directories.
+
+another small item: the spec defines that your program should 
+start when 'python3 main.py' is executed.
+
+code is quite clear, some parts might benefit from more
+explanations (COMMENT-state for example).
+Your 'reserved' dictionary contains quite a lot of items which are 
+not defined in the POPLang spec.
+
+document is ok and answers to all questions.
+"The compilation is done after lexical analysis when..."
+this is a bit misleading or too generic, 
+since there are several phases in the compilation 
+process after the lexical analysis...
+
+running the lexer with empty input shows debug-messages and a warning:
+WARNING: Token 'END' multiply defined
+
+Errors are exceptios with a trace. Quite pythonic way to do it, but
+the spec talks about printing an error message.
+
+Invalid date will generate two exceptions:
+...
+ValueError: time data '9999-99-01' does not match format '%Y-%m-%d'
+...
+During handling of the above exception, another exception occurred:
+...
+Exception: Illegal date format at line '2'
+
+
+
+
