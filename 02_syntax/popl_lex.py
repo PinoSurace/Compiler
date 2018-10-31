@@ -56,7 +56,7 @@ reserved = {
 tokens = [ 'LARROW', 'RARROW', 'LPAREN', 'RPAREN', 'COMMA', 'DOT', 'APOSTROPHE', \
            'SEMICOLON', 'EQ', 'NOTEQ', 'LT', 'LTEQ','GT', 'GTEQ', \
            'PLUS', 'MINUS', 'MULT', 'DIV', 'DAY_LITERAL', 'NUMBER_LITERAL', \
-           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID'] + list(reserved.values())
+           'STRING_LITERAL', 'varIDENT', 'funcIDENT', 'ID', 'POW'] + list(reserved.values())
 
 ##tokens definition
 
@@ -129,6 +129,7 @@ def t_WHITESPACE(t):
 
 
 # one and two letter tokens:
+t_POW = r'\*\*'
 t_LARROW = r'<-'
 t_RARROW = r'->'
 t_LPAREN = r'\('

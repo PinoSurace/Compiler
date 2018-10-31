@@ -61,6 +61,7 @@ def p_statement(p):
                  | return_statement
                  | if_statement
                  | while_statement
+                 | do_while_statement
                  | function_call'''
     #print( 'statement' )
 
@@ -98,12 +99,18 @@ def p_simple_expr(p):
 
 #term ::= factor { ( MULT | DIV ) factor }
 def p_term(p):
-    '''term : factor  
-            | factor  MULT  factor 
-            | factor  DIV  factor 
-            | term  MULT  factor 
-            | term  DIV  factor'''
+    '''term : simple_term
+            | simple_term  MULT  simple_term
+            | simple_term  DIV  simple_term
+            | term  MULT  simple_term
+            | term  DIV  simple_term'''
     print( 'term' )
+
+def p_simple_term(p):
+    '''simple_term : factor
+                   | factor  POW  factor
+                   | simple_term  POW  factor'''
+
 
 #factor ::= [ MINUS ] atom
 def p_factor(p):
