@@ -168,6 +168,10 @@ def p_while_statement(p):
     '''while_statement : WHILE expr loop_body'''
     print( 'while_statement' )
 
+def p_do_while_statement(p):
+    '''do_while_statement : DO statement_seq WHILE expr'''
+    print( 'do_while_statement' )
+
 def p_loop_body(p):
     '''loop_body : DO statement_seq ENDWHILE'''
     #print('loop_body')
