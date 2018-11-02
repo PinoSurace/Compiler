@@ -1,0 +1,10 @@
+Illegal date format at line '1'
+atom( 10 )
+factor
+term
+atom( 7 )
+factor
+term
+expr
+var_definition( abc )
+3:Syntax Error (token: '-')

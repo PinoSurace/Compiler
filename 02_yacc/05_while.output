@@ -1,0 +1,82 @@
+atom( 0 )
+factor
+term
+expr
+var_definition( stop? )
+atom( 0 )
+factor
+term
+expr
+var_definition( count )
+atom( stop? )
+factor
+term
+atom( 0 )
+factor
+term
+expr
+function_call
+statement_seq
+atom( ---------------------- )
+factor
+term
+expr
+function_call
+statement_seq
+function_call
+statement_seq
+atom( count )
+factor
+term
+atom( 1 )
+factor
+term
+expr
+assignment( count )
+statement_seq
+atom( count )
+factor
+term
+atom( 10 )
+factor
+term
+expr
+atom( 1 )
+factor
+term
+expr
+assignment( stop? )
+statement_seq
+if_statement
+statement_seq
+while_statement
+statement_seq
+atom( aa )
+factor
+term
+expr
+atom( bb )
+factor
+term
+expr
+atom( cc )
+factor
+term
+expr
+function_call
+statement_seq
+while_statement
+statement_seq
+while_statement
+statement_seq
+while_statement
+statement_seq
+function_call
+atom
+factor
+term
+atom( 7 )
+factor
+term
+expr
+26:Syntax Error (token: 'ENDWHILE')

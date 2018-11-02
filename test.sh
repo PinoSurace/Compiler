@@ -70,7 +70,7 @@ do
 
   # Writes python prints to .output file
 
-  echo $(python -u $assignment_directory/popl_yacc.py -f $filename) >> $outputPath
+  echo $(python -u $assignment_directory/main.py -f $filename) >> $outputPath
 
 
 

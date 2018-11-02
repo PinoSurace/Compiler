@@ -7,49 +7,18 @@ states = (
 
 # reserved words (each identified as a token) are:
 reserved = {
-    #'FALSE': 'FALSE',
-    #'NONE': 'NONE',
-    #'TRUE': 'TRUE',
-    #'AND' : 'AND',
-    #'AS' : 'AS',
-    #'ASSERT' : 'ASSERT',
-    #'ASYNC': 'ASYNC',
-    #'AWAIT': 'AWAIT',
-    #'BREAK': 'BREAK',
-    #'CLASS': 'CLASS',
-    #'CONTINUE': 'CONTINUE',
-    #'DEF': 'DEF',
-    #'DEL': 'DEL',
     'DO' : 'DO',
-    #'ELIF' : 'ELIF',
     'ELSE' : 'ELSE',
     'END' : 'END',
     'ENDIF' : 'ENDIF',
     'ENDWHILE' : 'ENDWHILE',
-    #'EXCEPT' : 'EXCEPT',
-    #'FINALLY' : 'FINALLY',
-    #'FOR': 'FOR',
-    #'FROM': 'FROM',
     'FUNCTION' : 'FUNCTION',
-    #'GLOBAL': 'GLOBAL',
     'IF' : 'IF',
-    #'IMPORT': 'IMPORT',
-    #'IN': 'IN',
     'IS' : 'IS',
-    #'LAMBDA': 'LAMBDA',
-    #'NONLOCAL': 'NONLOCAL',
-    #'NOT': 'NOT',
-    #'OR': 'OR',
-    #'PASS': 'PASS',
-    #'RAISE': 'RAISE',
     'RETURN' : 'RETURN',
     'THEN' : 'THEN',
-    #'TRY' : 'TRY',
     'WHILE' : 'WHILE',
-    #'WITH': 'WITH',
-    'VAR': 'VAR',
-    #'YIELD': 'YIELD'
-
+    'VAR': 'VAR'
 }
 
 #tokens list
@@ -162,7 +131,7 @@ def t_DAY_LITERAL(t):
         t.value = datetime.datetime.strptime( t.value, '%Y-%m-%d').date()
         return t
     except ValueError:
-        raise Exception("Illegal date format at line '{}'".format( t.lexer.lineno))
+        print("Illegal date format at line '{}'".format( t.lexer.lineno))
 
 
 #** one or more numerical digits **
@@ -205,7 +174,7 @@ def t_ID(t):
 
 
 def t_error(t):
-    raise Exception("Illegal character '{}' at line {}".format( t.value[0], t.lexer.lineno ) )
+    print("Illegal character '{}' at line {}".format( t.value[0], t.lexer.lineno ) )
 
 # define lexer in module level so it can be used after 
 # importing this module:
