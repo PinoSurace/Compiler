@@ -39,12 +39,12 @@ statement_seq END SEMICOLON
 #### g. Does this syntax suffer from the "dangling else" problem (see course material)? Why?
 No, because there is the ENDIF word that indentify the end of if/if else statements, so it is
 always known to which if statement the else statement is referred.
-h. Are the following allowed by the syntax: xx--yy and --xx? Why?
+#### h. Are the following allowed by the syntax: xx--yy and --xx? Why?
 Xx - - yy is allowed by the syntax because it is considered as subtraction between two
 terms:
-Xx - - yy --> atom(Xx) MINUS MINUS yy --> factor MINUS MINUS atom(yy) --> term MINUS
+  1. Xx - - yy --> atom(Xx) MINUS MINUS yy --> factor MINUS MINUS atom(yy) --> term MINUS
 MINUS atom(yy) --> term MINUS factor --> term MINUS term --> simple_expr
-- - xx is not allowed because MINUS factor is not allowed in the syntax.
+  2. - xx is not allowed because MINUS factor is not allowed in the syntax.
 #### i. Is the following allowed by the syntax: 1 <= xx <= 3? Why?
 No, because it is only allowed to have <= only between two simple_expr and it this case it
 would be:
@@ -56,9 +56,9 @@ of factors, so it is not possible that addition/subtraction are made before
 multiplication/division.
 ### 5. Did you implement any extras? If so explain them (what and how)
 Yes, the extra parts are:
-• Define and accept new loop structure: DO ... WHILE expr;
+1. Define and accept new loop structure: DO ... WHILE expr;
 This has been done using a simple rule in the syntax check.
-• Define and accept x ** y (x to the power y) which has higher priority
+..2. Define and accept x ** y (x to the power y) which has higher priority
 than multiplication and division
 This has been done defining the rule POW in the lexer that matches the
 ‘**’ and adding another rule that matches POW before MULT and DIV.6. 
