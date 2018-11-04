@@ -9,12 +9,13 @@ defined by the programming language.
 
 ### 2. How is the syntactic structure of the language expressed in the PLY tool? I.e., what parts are needed in the code and how are they related to syntactic rules of the language?
   * It is expressed as a set of rules that define the grammar of the programming language. Rules are defined
-using python functions, that take p as parameter. If the syntax of the program doesn’t match the rules,
+using python functions, that take p as parameter. 
+  * If the syntax of the program doesn’t match the rules,
 an error is raised.
 ### 3. Explain in English what the syntax of the following elements mean (i.e. how would you describe the syntax in textual form):
 #### a. Variable definitions:
   * Variable definition begins with keyword VAR, followed by a variable name (varIDENT).
-Then there is the keyword IS followed by an expression and at the end there is the SEMICOLON.
+  * Then there is the keyword IS followed by an expression and at the end there is the SEMICOLON.
 #### b. Function definitions
   * Function definition begins with keyword FUNCTION, followed by a function name
 (funcIDENT). 
