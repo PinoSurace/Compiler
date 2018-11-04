@@ -1,5 +1,5 @@
 
-TIE-20306 Principles of Programming Languages
+# TIE-20306 Principles of Programming Languages
 
 
 This GIT repository is for the development of the course project.
