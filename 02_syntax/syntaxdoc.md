@@ -63,6 +63,6 @@ than multiplication and division
 This has been done defining the rule POW in the lexer that matches the
 ‘**’ and adding another rule that matches POW before MULT and DIV.6. 
 
-### What did you think of this assignment? What was difficult? What was easy? Did you learn anything useful?
+## What did you think of this assignment? What was difficult? What was easy? Did you learn anything useful?
 I think this assignment is really good to learn the different phases of compilation process. Moreover
 dealing with different problem caused from errors, made us really understand things.
