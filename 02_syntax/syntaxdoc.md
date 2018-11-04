@@ -29,8 +29,8 @@ Expression consists of wither just a simple expression or a simple expression fo
 one between the keywords EQ,NOTEQ,LT, LTEQ, GT, GTEQ and another simple
 expression.
 ### 4. Answer the following based on the syntax definition:
-#### e. Is it possible to have an assignment where you assign try to assign to a function
-instead of a variable? Why?No it is not possible, because in the assignment only varIdent and combination of it are
+#### e. Is it possible to have an assignment where you assign try to assign to a function instead of a variable? Why?
+No it is not possible, because in the assignment only varIdent and combination of it are
 allowed.
 #### f.Is it possible to have a function definition with no statements (i.e. empty function
 body)? Why?
@@ -63,7 +63,6 @@ than multiplication and division
 This has been done defining the rule POW in the lexer that matches the
 ‘**’ and adding another rule that matches POW before MULT and DIV.6. 
 
-### What did you think of this assignment? What was difficult? What was easy? Did you learn
-anything useful?
+### What did you think of this assignment? What was difficult? What was easy? Did you learn anything useful?
 I think this assignment is really good to learn the different phases of compilation process. Moreover
 dealing with different problem caused from errors, made us really understand things.
