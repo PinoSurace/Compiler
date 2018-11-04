@@ -40,11 +40,11 @@ statement_seq END SEMICOLON
 No, because there is the ENDIF word that indentify the end of if/if else statements, so it is
 always known to which if statement the else statement is referred.
 #### h. Are the following allowed by the syntax: xx--yy and --xx? Why?
-Xx - - yy is allowed by the syntax because it is considered as subtraction between two
+Xx--yy is allowed by the syntax because it is considered as subtraction between two
 terms:
-  1. Xx - - yy --> atom(Xx) MINUS MINUS yy --> factor MINUS MINUS atom(yy) --> term MINUS
+  1. Xx--yy --> atom(Xx) MINUS MINUS yy --> factor MINUS MINUS atom(yy) --> term MINUS
 MINUS atom(yy) --> term MINUS factor --> term MINUS term --> simple_expr
-  2. -- xx is not allowed because MINUS factor is not allowed in the syntax.
+  2. --xx is not allowed because MINUS factor is not allowed in the syntax.
 #### i. Is the following allowed by the syntax: 1 <= xx <= 3? Why?
 No, because it is only allowed to have <= only between two simple_expr and it this case it
 would be:
