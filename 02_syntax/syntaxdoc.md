@@ -56,9 +56,9 @@ of factors, so it is not possible that addition/subtraction are made before
 multiplication/division.
 ### 5. Did you implement any extras? If so explain them (what and how)
 Yes, the extra parts are:
-1. Define and accept new loop structure: DO ... WHILE expr;
+  1. Define and accept new loop structure: DO ... WHILE expr;
 This has been done using a simple rule in the syntax check.
-..2. Define and accept x ** y (x to the power y) which has higher priority
+  2. Define and accept x ** y (x to the power y) which has higher priority
 than multiplication and division
 This has been done defining the rule POW in the lexer that matches the
 ‘**’ and adding another rule that matches POW before MULT and DIV.6. 
