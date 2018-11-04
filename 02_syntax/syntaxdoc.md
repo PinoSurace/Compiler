@@ -44,7 +44,7 @@ Xx - - yy is allowed by the syntax because it is considered as subtraction betwe
 terms:
   1. Xx - - yy --> atom(Xx) MINUS MINUS yy --> factor MINUS MINUS atom(yy) --> term MINUS
 MINUS atom(yy) --> term MINUS factor --> term MINUS term --> simple_expr
-  2. - xx is not allowed because MINUS factor is not allowed in the syntax.
+  2. -- xx is not allowed because MINUS factor is not allowed in the syntax.
 #### i. Is the following allowed by the syntax: 1 <= xx <= 3? Why?
 No, because it is only allowed to have <= only between two simple_expr and it this case it
 would be:
