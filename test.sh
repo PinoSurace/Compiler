@@ -38,7 +38,7 @@ examples_directory="02_yacc"
 
 # Move to main.py directory
 
-#cd $assignment_directory
+cd $assignment_directory
 
 IFS=
 
@@ -70,7 +70,7 @@ do
 
   # Writes python prints to .output file
 
-  echo $(python -u $assignment_directory/main.py -f $filename) >> $outputPath
+  echo $(python -u main.py -f $filename) >> $outputPath
 
 
 
