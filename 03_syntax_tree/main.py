@@ -34,36 +34,65 @@ def p_codeitem(p):
     '''codeitem : var_definition
                 | func_definition
                 | statement_seq'''
+    p[0] = p[1]
    #print( 'codeitem' )
 
 #var_definition ::= VAR varIDENT IS expr SEMICOLON
 def p_var_definition(p):
     '''var_definition : VAR varIDENT IS expr SEMICOLON'''
-    print( 'var_definition( '+p[2]+' )' )
+    #print( 'var_definition( '+p[2]+' )' )
+    p[0] = ASTnode('var_definition')
+    p[0].child_expr = p[4]
+    p[0].value = p[2]
 
 #func_definition ::= FUNCTION funcIDENT LPAREN [ formals ] RPAREN fbody
-def p_func_definition(p):
-    '''func_definition : FUNCTION funcIDENT LPAREN formals RPAREN fbody
-                       | FUNCTION funcIDENT LPAREN empty RPAREN fbody'''
-    print( 'func_definition( ' +p[2]+ ' )' )
+def p_func_definition1(p):
+    '''func_definition : FUNCTION funcIDENT LPAREN formals RPAREN fbody'''
+    #print( 'func_definition( ' +p[2]+ ' )' )
+    p[0] = ASTnode('func_definition')
+    p[0].child_fbody = p[6]
+    p[0].child_formals = p[4]
+    p[0].value = p[2]
+
+
+def p_func_definition2(p):
+    '''func_definition : FUNCTION funcIDENT LPAREN empty RPAREN fbody'''
+    # print( 'func_definition( ' +p[2]+ ' )' )
+    p[0] = ASTnode('func_definition')
+    p[0].child_fbody = p[6]
+    p[0].value = p[2]
 
 #formals ::= varIDENT { COMMA varIDENT }
-def p_formals(p):
-    '''formals : varIDENT
-               | varIDENT COMMA varIDENT
-               | formals COMMA varIDENT'''
+def p_formals1(p):
+    '''formals : varIDENT'''
     #print( 'formals' )
+    p[0] = ASTnode('formals')
+    p[0].children_varIDENTs = [p[1]]
+
+def p_formals2(p):
+    '''formals : formals COMMA varIDENT'''
+    #print( 'formals' )
+    p[0] = p[1]
+    p[0].children_varIDENTs.append(p[3])
 
 #fbody ::= RARROW statement_seq END SEMICOLON
 def p_fbody(p):
     '''fbody : RARROW statement_seq END SEMICOLON'''
     #print( 'fbody' )
+    p[0] = p[2]
 
 #statement_seq ::= statement SEMICOLON { statement SEMICOLON }
-def p_statement_seq(p):
-    '''statement_seq : statement SEMICOLON
-                     | statement_seq statement SEMICOLON'''
-    print( 'statement_seq' )
+def p_statement_seq1(p):
+    '''statement_seq : statement SEMICOLON'''
+    #print( 'statement_seq' )
+    p[0] = ASTnode('statement_seq')
+    p[0].children_statements = [p[1]]
+
+def p_statement_seq2(p):
+    '''statement_seq : statement_seq statement SEMICOLON'''
+    #print( 'statement_seq' )
+    p[0] = p[1]
+    p[0].children_statements.append(p[2])
 
 
 #statement ::= assignment | return_statement | **if_statement**
@@ -76,47 +105,71 @@ def p_statement(p):
                  | do_while_statement
                  | function_call'''
     #print( 'statement' )
+    p[0] = ASTnode(p[1])
 
 #return_statement ::= RETURN expr
 def p_return_statement(p):
     '''return_statement : RETURN expr'''
-    print( 'return_statement' )
+    #print( 'return_statement' )
+    p[0] = p[2]
 
 #assignment ::= varIDENT [ DOT varIDENT ] LARROW expr
-def p_assignment(p):
-    '''assignment : varIDENT DOT varIDENT LARROW expr
-                  | varIDENT empty LARROW expr'''
-    print( 'assignment( '+p[1]+' )' )
+def p_assignment1(p):
+    '''assignment : varIDENT DOT varIDENT LARROW expr'''
+    #print( 'assignment( '+p[1]+' )' )
+    p[0]  = ASTnode(p[1] + '.' + p[3])
+    p[0].child_expr = p[5]
+
+def p_assignment2(p):
+    '''assignment : varIDENT empty LARROW expr'''
+    #print( 'assignment( '+p[1]+' )' )
+    p[0] = ASTnode(p[1])
+    p[0].child_expr = p[4]
 
 #expr ::= simple_expr [ ( EQ | NOTEQ | LT | LTEQ | GT | GTEQ ) simple_expr ]
-def p_expr(p):
-    '''expr : simple_expr
-            | simple_expr EQ simple_expr
+def p_expr1(p):
+    '''expr : simple_expr'''
+    p[0] = p[1]
+    #print( 'expr' )
+
+def p_expr2(p):
+    '''expr : simple_expr EQ simple_expr
             | simple_expr NOTEQ simple_expr
             | simple_expr LT simple_expr
             | simple_expr LTEQ simple_expr
             | simple_expr GT simple_expr
             | simple_expr GTEQ simple_expr'''
-    print( 'expr' )
+    p[0] = ASTnode(p[2])
+    p[0].children_simple_expr.append(p[1]).append(p[3])
 
 #simple_expr ::= term { ( PLUS | MINUS ) term }
-def p_simple_expr(p):
-    '''simple_expr : term
-                   | term PLUS term
+def p_simple_expr1(p):
+    '''simple_expr : term'''
+    p[0] = p[1]
+    #print( 'simple_expr' )
+
+def p_simple_expr2(p):
+    '''simple_expr : term PLUS term
                    | term MINUS term
                    | simple_expr PLUS term
                    | simple_expr MINUS term'''
     #print( 'simple_expr' )
+    p[0] = ASTnode(p[2])
+    p[0].children_simple_expr.append(p[1]).append(p[3])
 
 
 #term ::= factor { ( MULT | DIV ) factor }
-def p_term(p):
-    '''term : simple_term
-            | simple_term  MULT  simple_term
+def p_term1(p):
+    '''term : simple_term'''
+    #print( 'term' )
+    p[0] = p[1]
+
+def p_term2(p):
+    '''term : simple_term  MULT  simple_term
             | simple_term  DIV  simple_term
             | term  MULT  simple_term
             | term  DIV  simple_term'''
-    print( 'term' )
+    #print( 'term' )
 
 def p_simple_term(p):
     '''simple_term : factor
@@ -213,10 +266,23 @@ parser = yacc.yacc()
 if __name__ == '__main__':
     import argparse, codecs
     arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--treetype',
+                        default='unicode',
+                        const='unicode',
+                        nargs='?',
+                        choices=['ascii', 'unicode', 'dot'],
+                        help='output format: ascii, unicode or dot (default: %(default)s)')
+
+
     group = arg_parser.add_mutually_exclusive_group()
     group.add_argument('--who', action='store_true', help='who wrote this' )
     group.add_argument('-f', '--file', help='filename to process')
     ns = arg_parser.parse_args()
+
+    outformat="unicode"
+    if ns.treetype:
+        outformat = ns.treetype
+
     if ns.who == True:
         # identify who wrote this
         print('246258 Joonas Jäppinen')
@@ -227,6 +293,7 @@ if __name__ == '__main__':
     else:
         data = codecs.open( ns.file, encoding='utf-8' ).read()
         result = parser.parse(data, lexer=popl_lex.lexer, debug=False)
+        treeprint(result, outformat)
         #if result is None:
         #    print( 'syntax OK' )
 
