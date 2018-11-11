@@ -2,9 +2,14 @@
 
 from ply import yacc
 import popl_lex # previous phase example snippet code
-
+from tree_print import treeprint
 # tokens are defined in lex-module, but needed here also in syntax rules
 tokens = popl_lex.tokens
+
+class ASTnode:
+    def __init__(self, typestr):
+        self.nodetype = typestr
+
 
 # any funcion starting with 'p_' is PLY yacc rule
 # first definition is the target we want to reduce
@@ -12,10 +17,17 @@ tokens = popl_lex.tokens
 # is the only one left, we do not have any syntax errors
 
 #program ::= codeitem { codeitem }
-def p_program(p):
-    '''program : codeitem
-               | program codeitem'''
+def p_program1(p):
+    '''program : codeitem'''
+    p[0] = ASTnode('program')
+    p[0].children_codeitems = [p[1]]
     #print( 'program' )
+
+def p_program2(p):
+    '''program : program codeitem'''
+    p[0] = p[1]
+    p[0].children_codeitems.append(p[2])
+
 
 #codeitem ::= var_definition | func_definition | statement_seq
 def p_codeitem(p):
