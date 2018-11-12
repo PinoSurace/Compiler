@@ -1,0 +1,26 @@
+VAR stop? IS 0;
+VAR count IS 0;
+WHILE stop? = 0
+DO
+  Print;
+  Print("----------------------");
+  Print;
+  count <- count + 1;
+  IF count > 10 THEN
+    stop? <- 1;
+  ENDIF;
+ENDWHILE;
+
+WHILE aa DO
+  WHILE bb DO
+    WHILE cc DO
+      Something;
+    ENDWHILE;
+  ENDWHILE;
+ENDWHILE;
+
+[ body part cannot be empty ]
+WHILE Print != 7
+DO
+  [ empty ]
+ENDWHILE;

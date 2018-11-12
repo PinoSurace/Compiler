@@ -1,0 +1,6 @@
+[ corret var definition: ]
+VAR abc IS (7 + 3) * -7;
+
+[ this is 'expr expr' which is not correct syntax ]
+VAR def IS 7+3 + 9-4 ;
+

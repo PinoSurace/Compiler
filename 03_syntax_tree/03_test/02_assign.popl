@@ -1,0 +1,11 @@
+[ one 'dot' selector in assignment is ok: ]
+variable <- 2018-11-01;
+variable.year <- 2020;
+
+[ syntax is ok. weather variable 'something' is defined or not is ]
+[ a semantic check ]
+variable.month <- something;  
+
+[ two dots is not correct syntax: ]
+[variable.year.part <- something;]
+
