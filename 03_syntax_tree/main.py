@@ -228,11 +228,7 @@ def p_factor2(p):
 #       | varIDENT [ APOSTROPHE varIDENT ]
 #       | **function_call** | LPAREN expr RPAREN
 def p_atom1(p):
-    '''atom : NUMBER_LITERAL
-            | DAY_LITERAL
-            | STRING_LITERAL
-            | varIDENT empty
-            | function_call
+    '''atom : function_call
             | LPAREN expr RPAREN'''
 
     if len(p) == 4:
@@ -241,14 +237,27 @@ def p_atom1(p):
         p[0] = p[1]
     #print('atom( ' + str(p[1]) + ' )')
 
-
 def p_atom2(p):
-    '''atom :  varIDENT APOSTROPHE varIDENT'''
-    p[0] = ASTnode('op')
-    p[0].value = p[2]
-    p[0].child_idx1 = p[1]
-    p[0].child_idx2 = p[3]
+    '''atom : NUMBER_LITERAL
+            | DAY_LITERAL
+            | STRING_LITERAL'''
 
+    p[0] = ASTnode('literal')
+    p[0].value = p[1]
+
+
+def p_atom3(p):
+    '''atom :  varIDENT APOSTROPHE varIDENT
+            | varIDENT empty'''
+
+    if len(p) == 4:
+        p[0] = ASTnode('op')
+        p[0].value = p[2]
+        p[0].child_idx1 = p[1]
+        p[0].child_idx2 = p[3]
+
+    else:
+        p[0] = ASTnode(p[1])
 
 
 #** function_call ** is either just a function name (funcIDENT) or
@@ -270,6 +279,7 @@ def p_comma_sep_expr1(p):
     '''comma_sep_expr : expr'''
     p[0] = ASTnode('comma_sep_expr')
     p[0].children_expr = [p[1]]
+
 def p_comma_sep_expr2(p):
     '''comma_sep_expr : comma_sep_expr COMMA expr'''
     p[0] = p[1]
