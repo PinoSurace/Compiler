@@ -42,38 +42,39 @@ def p_var_definition(p):
     '''var_definition : VAR varIDENT IS expr SEMICOLON'''
     #print( 'var_definition( '+p[2]+' )' )
     p[0] = ASTnode('var_definition')
-    p[0].child_expr = p[4]
-    p[0].value = p[2]
+    p[0].child_var_name = ASTnode(p[2])
+    p[0].child_value = p[4]
+
 
 #func_definition ::= FUNCTION funcIDENT LPAREN [ formals ] RPAREN fbody
 def p_func_definition1(p):
     '''func_definition : FUNCTION funcIDENT LPAREN formals RPAREN fbody'''
     #print( 'func_definition( ' +p[2]+ ' )' )
     p[0] = ASTnode('func_definition')
-    p[0].child_fbody = p[6]
-    p[0].child_formals = p[4]
-    p[0].value = p[2]
+    p[0].child_func_name = ASTnode(p[2])
+    p[0].child_func_body = p[6]
+    p[0].child_func_parameters = p[4]
 
 
 def p_func_definition2(p):
     '''func_definition : FUNCTION funcIDENT LPAREN empty RPAREN fbody'''
     # print( 'func_definition( ' +p[2]+ ' )' )
     p[0] = ASTnode('func_definition')
-    p[0].child_fbody = p[6]
-    p[0].value = p[2]
+    p[0].child_func_name =  ASTnode(p[2])
+    p[0].child_func_body = p[6]
 
 #formals ::= varIDENT { COMMA varIDENT }
 def p_formals1(p):
     '''formals : varIDENT'''
     #print( 'formals' )
     p[0] = ASTnode('formals')
-    p[0].children_varIDENTs = [p[1]]
+    p[0].children_varIDENTs = [ASTnode(p[1])]
 
 def p_formals2(p):
     '''formals : formals COMMA varIDENT'''
     #print( 'formals' )
     p[0] = p[1]
-    p[0].children_varIDENTs.append(p[3])
+    p[0].children_varIDENTs.append(ASTnode(p[3]))
 
 #fbody ::= RARROW statement_seq END SEMICOLON
 def p_fbody(p):
@@ -112,16 +113,19 @@ def p_return_statement(p):
     '''return_statement : RETURN expr'''
     #print( 'return_statement' )
     p[0] = ASTnode('return_statement')
-    p[0].child_expr = p[2]
+    p[0].child_value = p[2]
 
 #assignment ::= varIDENT [ DOT varIDENT ] LARROW expr
 def p_assignment1(p):
     '''assignment : varIDENT DOT varIDENT LARROW expr'''
     #print( 'assignment( '+p[1]+' )' )
     p[0]  = ASTnode('assignment')
-    p[0].children_var = [p[1]]
-    p[0].children_var.append(p[3])
-    p[0].child_op = p[2]
+    #p[0].children_op = [p[1]]
+    #p[0].children_var.append(p[3])
+    p[0].child_var = ASTnode('op')
+    p[0].child_var.value = p[2]
+    p[0].child_var.child_idx1 = ASTnode(p[1])
+    p[0].child_var.child_idx2 = ASTnode(p[3])
     p[0].child_expr = p[5]
 
 
@@ -129,7 +133,7 @@ def p_assignment2(p):
     '''assignment : varIDENT empty LARROW expr'''
     #print( 'assignment( '+p[1]+' )' )
     p[0] = ASTnode('assignment')
-    p[0].child_var = p[1]
+    p[0].child_var = ASTnode(p[1])
     p[0].child_expr = p[4]
 
 #expr ::= simple_expr [ ( EQ | NOTEQ | LT | LTEQ | GT | GTEQ ) simple_expr ]
@@ -145,58 +149,76 @@ def p_expr2(p):
             | simple_expr LTEQ simple_expr
             | simple_expr GT simple_expr
             | simple_expr GTEQ simple_expr'''
-    p[0] = ASTnode('expr')
-    p[0].child_op = p[2]
-    p[0].children_simple_expr =[p[1]]
-    p[0].children_simple_expr.append(p[3])
+    #p[0] = ASTnode('expr')
+    #p[0].child_op = p[2]
+    #p[0].children_simple_expr =[p[1]]
+    #p[0].children_simple_expr.append(p[3])
+    p[0] = ASTnode('op')
+    p[0].value = p[2]
+    p[0].child_idx1 = p[1]
+    p[0].child_idx2 = p[3]
 
 #simple_expr ::= term { ( PLUS | MINUS ) term }
 def p_simple_expr1(p):
     '''simple_expr : term'''
-    p[0] = ASTnode('simple_expr')
-    p[0].children_terms = [p[1]]
+    p[0] = p[1]
+    #p[0] = ASTnode('simple_expr')
+    #p[0].children_terms = [p[1]]
     #print( 'simple_expr' )
 
 def p_simple_expr2(p):
     '''simple_expr : simple_expr PLUS term
                    | simple_expr MINUS term'''
     #print( 'simple_expr' )
-    p[0] = p[1]
-    p[0].children_terms.append(p[3])
-    p[0].child_op = p[2]
+    #p[0] = p[1]
+    #p[0].children_terms.append(p[3])
+    #p[0].child_op = p[2]
+    p[0] = ASTnode('op')
+    p[0].value = p[2]
+    p[0].child_idx1 = p[1]
+    p[0].child_idx2 = p[3]
 
 
 #term ::= factor { ( MULT | DIV ) factor }
 def p_term1(p):
     '''term : simple_term'''
+    p[0] = p[1]
+
     #print( 'term' )
-    p[0] = ASTnode('term')
-    p[0].children_simple_terms = [p[1]]
+    #p[0] = ASTnode('term')
+    #p[0].children_simple_terms = [p[1]]
 
 def p_term2(p):
     '''term : term  MULT  simple_term
             | term  DIV  simple_term'''
     #print( 'term' )
-    p[0] = p[1]
-    p[0].children_simple_terms.append(p[3])
-    p[0].child_op = p[2]
+    #p[0] = p[1]
+    #p[0].children_simple_terms.append(p[3])
+    #p[0].child_op = p[2]
+    p[0] = ASTnode('op')
+    p[0].value = p[2]
+    p[0].child_idx1 = p[1]
+    p[0].child_idx2 = p[3]
 
 def p_simple_term1(p):
     '''simple_term : factor'''
-    p[0] = ASTnode('simple_term')
-    p[0].children_factors = [p[1]]
+    p[0] = p[1]
+    #p[0] = ASTnode('simple_term')
+    #p[0].children_factors = [p[1]]
 
 def p_simple_term2(p):
     '''simple_term : simple_term  POW  factor'''
-    p[0].children_factors.append(p[3])
-    p[0].child_op = p[2]
+    p[0] = ASTnode('op')
+    p[0].value = p[2]
+    p[0].child_idx1 = p[1]
+    p[0].child_idx2 = p[3]
 
 #factor ::= [ MINUS ] atom
 def p_factor1(p):
     '''factor : MINUS atom'''
-    p[0] = ASTnode('factor')
+    p[0] = ASTnode('op')
     p[0].child_atom = p[2]
-    p[0].child_op = p[1]
+    p[0].value = p[1]
     #print( 'factor' )
 
 def p_factor2(p):
@@ -207,11 +229,7 @@ def p_factor2(p):
 #       | varIDENT [ APOSTROPHE varIDENT ]
 #       | **function_call** | LPAREN expr RPAREN
 def p_atom1(p):
-    '''atom : NUMBER_LITERAL
-            | DAY_LITERAL
-            | STRING_LITERAL
-            | varIDENT empty
-            | function_call
+    '''atom : function_call
             | LPAREN expr RPAREN'''
 
     if len(p) == 4:
@@ -220,14 +238,27 @@ def p_atom1(p):
         p[0] = p[1]
     #print('atom( ' + str(p[1]) + ' )')
 
-
 def p_atom2(p):
-    '''atom :  varIDENT APOSTROPHE varIDENT'''
-    p[0] = ASTnode('atom')
-    p[0].children_var = [p[1]]
-    p[0].children_var.append(p[3])
-    p[0].child_op = p[2]
+    '''atom : NUMBER_LITERAL
+            | DAY_LITERAL
+            | STRING_LITERAL'''
 
+    p[0] = ASTnode('literal')
+    p[0].value = p[1]
+
+
+def p_atom3(p):
+    '''atom :  varIDENT APOSTROPHE varIDENT
+            | varIDENT empty'''
+
+    if len(p) == 4:
+        p[0] = ASTnode('op')
+        p[0].value = p[2]
+        p[0].child_idx1 = p[1]
+        p[0].child_idx2 = p[3]
+
+    else:
+        p[0] = ASTnode(p[1])
 
 
 #** function_call ** is either just a function name (funcIDENT) or
@@ -238,10 +269,10 @@ def p_function_call(p):
                      | funcIDENT LPAREN comma_sep_expr RPAREN'''
     #print( 'function_call' )
     p[0] = ASTnode('function_call')
-    p[0].value = p[1]
+    p[0].child_name = ASTnode(p[1])
 
     if len(p) == 5:
-        p[0].child_comma_sep_expr = p[3]
+        p[0].child_args = p[3]
 
 
 
@@ -249,6 +280,7 @@ def p_comma_sep_expr1(p):
     '''comma_sep_expr : expr'''
     p[0] = ASTnode('comma_sep_expr')
     p[0].children_expr = [p[1]]
+
 def p_comma_sep_expr2(p):
     '''comma_sep_expr : comma_sep_expr COMMA expr'''
     p[0] = p[1]
