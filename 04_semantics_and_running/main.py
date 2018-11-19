@@ -3,6 +3,14 @@
 from ply import yacc
 import popl_lex # previous phase example snippet code
 from tree_print import treeprint
+
+from semantics_common import SemData
+
+from semantics_check import check_semantics
+
+from semantics_run import run_program
+
+
 # tokens are defined in lex-module, but needed here also in syntax rules
 tokens = popl_lex.tokens
 
@@ -342,15 +350,10 @@ parser = yacc.yacc()
 if __name__ == '__main__':
     import argparse, codecs
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--treetype',
-                    default='unicode',
-                    const='unicode',
-                    nargs='?',
-                    choices=['ascii', 'unicode', 'dot'],
-                    help='output format: ascii, unicode or dot (default: %(default)s)')
-
+    arg_parser.add_argument('-t', '--treetype', help='type of output tree (unicode/ascii/dot)')
+    arg_parser.add_argument('--tree', action='store_true', help='print syntax tree before semantic checks')
     group = arg_parser.add_mutually_exclusive_group()
-    group.add_argument('--who', action='store_true', help='who wrote this' )
+    group.add_argument('--who', action='store_true', help='who wrote this')
     group.add_argument('-f', '--file', help='filename to process')
     ns = arg_parser.parse_args()
 
@@ -367,8 +370,21 @@ if __name__ == '__main__':
         arg_parser.print_help()
     else:
         data = codecs.open( ns.file, encoding='utf-8' ).read()
-        result = parser.parse(data, lexer=popl_lex.lexer, debug=False)
-        treeprint(result, outformat)
+        ast_tree = parser.parse(data, lexer=popl_lex.lexer, debug=False)
+        if ns.tree == True:
+          treeprint(ast_tree, outformat)
+
+        semdata = SemData()
+        check_semantics(ast_tree, semdata)
+        if semdata.errors:
+          print("Semantic errors:")
+          for err in semdata.errors:
+            print(err)
+        else:
+          print("Semantics ok, running:")
+          run_program(ast_tree, semdata)
+
+
 
 
 
