@@ -11,11 +11,56 @@ def eval_node(node, semdata):
   if node.nodetype == 'program':
     # Copy and store current stack
     semdata.old_stacks.append(semdata.stack.copy())
-    for i in node.children_stmts:
+    for i in node.children_codeitems:
       eval_node(i, semdata)
     # Restore stack
-    semdata.stack = semdata.old_stacks.pop()
+    #semdata.stack = semdata.old_stacks.pop()
     return None
+  elif node.nodetype == 'var_definition':
+    pass
+  elif node.nodetype == 'func_definition':
+    pass
+  elif node.nodetype == 'formals':
+    pass
+  elif node.nodetype == 'statement_seq':
+    pass
+  elif node.nodetype == 'return_statement':
+    pass
+  elif node.nodetype == 'assignment':
+    pass
+  elif node.nodetype == 'binary_op':
+    if node.value == '+':
+      pass
+    elif node.value == '-':
+      pass
+    elif node.value == '*':
+      pass
+    elif node.value == '/':
+      pass
+    elif node.value == '**':
+      pass
+    elif node.value == '.':
+      pass
+    elif node.value == '\'':
+      pass
+  elif node.nodetype == 'unary_op':
+    pass
+  elif node.nodetype == 'literal':
+    pass
+  elif node.nodetype == 'function_call':
+    pass
+  elif node.nodetype == 'comma_sep_expr':
+    pass
+  elif node.nodetype == 'if_statement':
+    pass
+  elif node.nodetype == 'while_statement':
+    pass
+  elif node.nodetype == 'do_while_statement':
+    pass
+
+
+
+
   elif node.nodetype == 'push':
     semdata.stack.append(node.child_roman.value)
     return None
