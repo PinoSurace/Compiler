@@ -1,0 +1,12 @@
+document: ok, all questions answered
+
+code: look good, no comments in code (or own comments, all are copy-paste
+from project description)
+
+extras: do..while, power
+
+Your submissions for phases 1 and 2 are accepted, and thus you have passsed
+the minimum requirements of the programming project. If you won't
+participate in the futher phases, your project will be given grade 1.5
+
+
