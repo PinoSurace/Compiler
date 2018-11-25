@@ -19,8 +19,4 @@ WHILE aa DO
   ENDWHILE;
 ENDWHILE;
 
-[ body part cannot be empty ]
-WHILE Print != 7
-DO
-  [ empty ]
-ENDWHILE;
+

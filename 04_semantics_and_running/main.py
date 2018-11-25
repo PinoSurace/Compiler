@@ -76,13 +76,13 @@ def p_formals1(p):
     '''formals : varIDENT'''
     #print( 'formals' )
     p[0] = ASTnode('formals')
-    p[0].children_varIDENTs = [ASTnode(p[1])]
+    p[0].children_args = [ASTnode(p[1])]
 
 def p_formals2(p):
     '''formals : formals COMMA varIDENT'''
     #print( 'formals' )
     p[0] = p[1]
-    p[0].children_varIDENTs.append(ASTnode(p[3]))
+    p[0].children_args.append(ASTnode(p[3]))
 
 #fbody ::= RARROW statement_seq END SEMICOLON
 def p_fbody(p):
@@ -130,7 +130,7 @@ def p_assignment1(p):
     p[0]  = ASTnode('assignment')
     #p[0].children_op = [p[1]]
     #p[0].children_var.append(p[3])
-    p[0].child_var = ASTnode('op')
+    p[0].child_var = ASTnode('binary_op')
     p[0].child_var.value = p[2]
     p[0].child_var.child_idx1 = ASTnode(p[1])
     p[0].child_var.child_idx2 = ASTnode(p[3])
@@ -161,7 +161,7 @@ def p_expr2(p):
     #p[0].child_op = p[2]
     #p[0].children_simple_expr =[p[1]]
     #p[0].children_simple_expr.append(p[3])
-    p[0] = ASTnode('op')
+    p[0] = ASTnode('binary_op')
     p[0].value = p[2]
     p[0].child_idx1 = p[1]
     p[0].child_idx2 = p[3]
@@ -181,7 +181,7 @@ def p_simple_expr2(p):
     #p[0] = p[1]
     #p[0].children_terms.append(p[3])
     #p[0].child_op = p[2]
-    p[0] = ASTnode('op')
+    p[0] = ASTnode('binary_op')
     p[0].value = p[2]
     p[0].child_idx1 = p[1]
     p[0].child_idx2 = p[3]
@@ -203,7 +203,7 @@ def p_term2(p):
     #p[0] = p[1]
     #p[0].children_simple_terms.append(p[3])
     #p[0].child_op = p[2]
-    p[0] = ASTnode('op')
+    p[0] = ASTnode('binary_op')
     p[0].value = p[2]
     p[0].child_idx1 = p[1]
     p[0].child_idx2 = p[3]
@@ -216,7 +216,7 @@ def p_simple_term1(p):
 
 def p_simple_term2(p):
     '''simple_term : simple_term  POW  factor'''
-    p[0] = ASTnode('op')
+    p[0] = ASTnode('binary_op')
     p[0].value = p[2]
     p[0].child_idx1 = p[1]
     p[0].child_idx2 = p[3]
@@ -224,7 +224,7 @@ def p_simple_term2(p):
 #factor ::= [ MINUS ] atom
 def p_factor1(p):
     '''factor : MINUS atom'''
-    p[0] = ASTnode('op')
+    p[0] = ASTnode('unary_op')
     p[0].child_atom = p[2]
     p[0].value = p[1]
     #print( 'factor' )
@@ -260,7 +260,7 @@ def p_atom3(p):
             | varIDENT empty'''
 
     if len(p) == 4:
-        p[0] = ASTnode('op')
+        p[0] = ASTnode('binary_op')
         p[0].value = p[2]
         p[0].child_idx1 = p[1]
         p[0].child_idx2 = p[3]

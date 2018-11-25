@@ -4,6 +4,7 @@
 # Generic useful stuff for semantic analysis and interpretation/code generation
 
 from tree_print import get_childvars
+import math
 
 
 # A class for collecting data needed during semantic analysis etc.
@@ -12,6 +13,22 @@ from tree_print import get_childvars
 class SemData:
     def __init__(self):
         self.symtbl = dict()
+
+        self.binary_op = {
+            "**": lambda x, y: math.pow(x , y),
+            "=": lambda x, y: x == y,
+            "!=": lambda x, y: x != y,
+            "<": lambda x, y: x < y,
+            "<=": lambda x, y: x <= y,
+            ">": lambda x, y: x > y,
+            ">=": lambda x, y: x >= y,
+            "+": lambda x, y: x + y,
+            "-": lambda x, y: x - y,
+            "*": lambda x, y: x * y,
+            "/": lambda x, y: x / y,
+        }
+
+
         self.errors = []  # List for possible semantic errors
 
 
@@ -22,6 +39,7 @@ class SymbolData:
     def __init__(self, symtype, node):
         self.symtype = symtype
         self.node = node
+
 
 
 # The function is given the root of the tree
