@@ -1,0 +1,7 @@
+IF var THEN
+  Print("ok");
+ENDIF;
+
+IF ( var + 7 ) < -var*9 THEN Do; ELSE Something; ENDIF;
+
+
