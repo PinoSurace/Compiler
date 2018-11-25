@@ -84,6 +84,8 @@ def eval_node(node, semdata):
     return None
 
   elif node.nodetype == 'while_statement':
+    while (eval_node(node.child_condition, semdata)):
+      eval_node(node.child_loop_body, semdata)
     return None
   elif node.nodetype == 'do_while_statement':
     return None

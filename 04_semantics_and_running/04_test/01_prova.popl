@@ -9,3 +9,14 @@ Print(abc);
 IF 3 <= 4 THEN
   Print("ok");
 ENDIF;
+
+VAR stop? IS 0;
+VAR count IS 0;
+WHILE 0 = 0
+DO
+
+  Print("----------------------");
+
+
+
+ENDWHILE;
