@@ -1,10 +1,12 @@
 Print(5, 5 * 3 + 4);
+Print( 5**5);
+Print(0 < 0);
 VAR abc IS 10;
 Print(abc);
 Print("abc");
 
 abc <- 3;
-Print(abc);
+Print(abc < 10);
 
 IF 3 <= 4 THEN
   Print("ok");
@@ -12,11 +14,9 @@ ENDIF;
 
 VAR stop? IS 0;
 VAR count IS 0;
-WHILE 0 = 0
-DO
-
-  Print("----------------------");
-
+Input;
+Input;
+Input;
 
 
-ENDWHILE;
+
