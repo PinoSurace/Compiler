@@ -2,3 +2,10 @@ Print(5, 5 * 3 + 4);
 VAR abc IS 10;
 Print(abc);
 Print("abc");
+
+abc <- 3;
+Print(abc);
+
+IF 3 <= 4 THEN
+  Print("ok");
+ENDIF;

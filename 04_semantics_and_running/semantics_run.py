@@ -39,8 +39,10 @@ def eval_node(node, semdata):
     return None
   elif node.nodetype == 'return_statement':
     return None
+
   elif node.nodetype == 'assignment':
-    semdata.symtbl[eval_node(node.child_var, semdata)].value = eval_node(node.child_value, semdata)
+    symtbl[eval_node(node.child_var, semdata)].value = eval_node(node.child_value, semdata)
+
     return None
   elif node.nodetype == 'binary_op':
 
@@ -75,7 +77,12 @@ def eval_node(node, semdata):
     return list
 
   elif node.nodetype == 'if_statement':
+    if(eval_node(node.child_condition, semdata)):
+      eval_node(node.child_then, semdata)
+    elif(node.child_else != None):
+      eval_node(node.child_else, semdata)
     return None
+
   elif node.nodetype == 'while_statement':
     return None
   elif node.nodetype == 'do_while_statement':
