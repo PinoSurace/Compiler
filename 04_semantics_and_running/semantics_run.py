@@ -12,24 +12,23 @@ def run_program(tree, semdata):
 
 def eval_node(node, semdata):
   symtbl = semdata.symtbl
+
   if node.nodetype == 'program':
-    # Copy and store current stack
-    #semdata.old_stacks.append(semdata.stack.copy())
     for i in node.children_codeitems:
       eval_node(i, semdata)
-    # Restore stack
-    #semdata.stack = semdata.old_stacks.pop()
     return None
+
   elif node.nodetype == 'var_definition':
     symbol = SymbolData('variable', node)
     symbol.value = eval_node(node.child_value, semdata)
-    semdata.symtbl[eval_node(node.child_var_name, semdata)] = symbol
+    symtbl[eval_node(node.child_var_name, semdata)] = symbol
     return None
+
   elif node.nodetype == 'func_definition':
     symbol = SymbolData('function', node)
     symbol.params = eval_node(node.child_func_parameters, semdata)
     symbol.body = eval_node(node.child_func_body, semdata)
-    semdata.symtbl[eval_node(node.child_var_name), semdata] = symbol
+    semdata.symtbl[eval_node(node.child_var_name, semdata)] = symbol
 
     return None
   elif node.nodetype == 'formals':
@@ -53,10 +52,19 @@ def eval_node(node, semdata):
   elif node.nodetype == 'literal':
     return node.value
 
+  elif node.nodetype == 'identifier':
+    return node.value
+
   elif node.nodetype == 'function_call':
     if node.child_func_name.value == 'Print':
-      for i in eval_node(node.child_args, semdata):
-        print(str(i), end=' ')
+
+      for i in node.child_args.children_expr:
+        if i.nodetype == 'identifier':
+          name = i.value
+          print(str(symtbl[name].value))
+        else:
+          print(eval_node(i , semdata))
+
 
     return None
   elif node.nodetype == 'comma_sep_expr':
