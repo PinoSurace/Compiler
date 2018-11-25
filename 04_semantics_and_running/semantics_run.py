@@ -28,11 +28,14 @@ def eval_node(node, semdata):
 
   elif node.nodetype == 'func_definition':
     symbol = SymbolData('function', node)
-    symbol.params = node.child_func_parameters
+    if(node.child_func_params != None):
+      symbol.params = node.child_func_params
     symbol.body = node.child_func_body
-    semdata.symtbl[eval_node(node.child_var_name, semdata)] = symbol
+    semdata.symtbl[eval_node(node.child_func_name, semdata)] = symbol
+
 
     return None
+
   elif node.nodetype == 'formals':
     list = []
     for i in node.children_args:
@@ -49,6 +52,7 @@ def eval_node(node, semdata):
     return eval_node(node.child_value, semdata)
 
   elif node.nodetype == 'assignment':
+
     symtbl[node.child_var.value].value = eval_node(node.child_value, semdata)
 
     return None
@@ -97,16 +101,22 @@ def eval_node(node, semdata):
           print(eval_node(i , semdata))
     else:
       func = symtbl[node.child_func_name.value]
-      params = func.params
-      body
+      if (node.child_args.children_expr != None):
+        params = eval_node(func.params, semdata)
+        args = eval_node(node.child_args.children_expr, semdata)
+        for i in range(0, len(params)):
+          symbol = SymbolData('variable', node)
+          symbol.value = args[i]
+          symtbl[params[i]] = symbol
 
-
+      eval_node(func.body, semdata)
     return None
+
+
   elif node.nodetype == 'comma_sep_expr':
     list = []
     for i in node.children_expr:
       list.append(eval_node(i, semdata))
-
     return list
 
   elif node.nodetype == 'if_statement':
@@ -120,7 +130,11 @@ def eval_node(node, semdata):
     while (eval_node(node.child_condition, semdata)):
       eval_node(node.child_loop_body, semdata)
     return None
+
   elif node.nodetype == 'do_while_statement':
+    eval_node(node.child_loop_body, semdata)
+    while (eval_node(node.child_condition, semdata)):
+      eval_node(node.child_loop_body, semdata)
     return None
 
 
