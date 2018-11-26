@@ -44,7 +44,7 @@ def eval_node(node, semdata):
 
   elif node.nodetype == 'func_definition':
     symbol = SymbolData('function', node)
-    if(node.child_func_params != None):
+    if(hasattr(node, 'child_func_params') ):
       symbol.params = node.child_func_params
     symbol.body = node.child_func_body
     semdata.symtbl[eval_node(node.child_func_name, semdata)] = symbol
@@ -104,7 +104,7 @@ def eval_node(node, semdata):
         #  print(str(eval_node(i , semdata)))
     else:
       func = symtbl[node.child_func_name.value]
-      if (node.child_args != None):
+      if (hasattr(node, 'child_args')):
         params = eval_node(func.params, semdata)
         args = eval_node(node.child_args, semdata)
         for i in range(0, len(params)):
@@ -125,7 +125,7 @@ def eval_node(node, semdata):
   elif node.nodetype == 'if_statement':
     if(eval_node(node.child_condition, semdata)):
       eval_node(node.child_then, semdata)
-    elif(node.child_else != None):
+    elif(hasattr(node, 'child_else')):
       eval_node(node.child_else, semdata)
     return None
 

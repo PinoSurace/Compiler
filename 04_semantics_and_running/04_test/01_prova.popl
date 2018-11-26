@@ -5,10 +5,10 @@ VAR abc IS 10;
 Print(abc);
 Print("abc");
 
-abc <- 3;
+abc <- 0;
 Print(abc < 10);
 
-IF 3 <= 4 THEN
+IF abc THEN
   Print("ok");
 ENDIF;
 
