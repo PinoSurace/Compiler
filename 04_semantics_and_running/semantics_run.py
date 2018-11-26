@@ -12,6 +12,22 @@ def run_program(tree, semdata):
 
   eval_node(tree, semdata)
 
+def build_in_input():
+  input_value = input()
+  try:
+    value = int(input_value)
+    print(type(value))
+    return value
+  except ValueError:
+    try:
+      value = datetime.datetime.strptime(input_value, '%Y-%m-%d')
+      print(type(value))
+      return value
+    except ValueError:
+      print(type(input_value))
+      return input_value
+
+
 def eval_node(node, semdata):
   symtbl = semdata.symtbl
 
@@ -32,33 +48,33 @@ def eval_node(node, semdata):
       symbol.params = node.child_func_params
     symbol.body = node.child_func_body
     semdata.symtbl[eval_node(node.child_func_name, semdata)] = symbol
-
-
     return None
 
   elif node.nodetype == 'formals':
     list = []
     for i in node.children_args:
       list.append(eval_node(i, semdata))
-
     return list
 
   elif node.nodetype == 'statement_seq':
     for i in node.children_statements:
-      eval_node(i, semdata)
+      out = eval_node(i, semdata)
+      if out != None:
+        return out
     return None
+
 
   elif node.nodetype == 'return_statement':
     return eval_node(node.child_value, semdata)
 
   elif node.nodetype == 'assignment':
-
     symtbl[node.child_var.value].value = eval_node(node.child_value, semdata)
-
     return None
 
   elif node.nodetype == 'binary_op':
-    return semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
+
+    out = semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
+    return out
 
 
   elif node.nodetype == 'unary_op':
@@ -71,45 +87,32 @@ def eval_node(node, semdata):
   elif node.nodetype == 'identifier':
     if node.value in symtbl:
       return symtbl[node.value].value
-    return node.value
+    else:
+      return node.value
 
   elif node.nodetype == 'function_call':
     if node.child_func_name.value == 'Input':
-      input_value = input()
-      try:
-        value = int(input_value)
-        print(type(value))
-        return value
-      except ValueError:
-        try:
-          value = datetime.datetime.strptime( input_value, '%Y-%m-%d')
-          print(type(value))
-          return value
-        except ValueError:
-          print(type(input_value))
-          return input_value
-
-
-
+      return build_in_input()
     elif node.child_func_name.value == 'Print':
 
       for i in node.child_args.children_expr:
-        if i.nodetype == 'identifier':
-          name = i.value
-          print(str(symtbl[name].value))
-        else:
-          print(eval_node(i , semdata))
+        print(str(eval_node(i, semdata)))
+        #if i.nodetype == 'identifier':
+        #  name = i.value
+        #  print(str(symtbl[name].value))
+        #else:
+        #  print(str(eval_node(i , semdata)))
     else:
       func = symtbl[node.child_func_name.value]
-      if (node.child_args.children_expr != None):
+      if (node.child_args != None):
         params = eval_node(func.params, semdata)
-        args = eval_node(node.child_args.children_expr, semdata)
+        args = eval_node(node.child_args, semdata)
         for i in range(0, len(params)):
           symbol = SymbolData('variable', node)
           symbol.value = args[i]
           symtbl[params[i]] = symbol
-
-      eval_node(func.body, semdata)
+      out = eval_node(func.body, semdata)
+      return out
     return None
 
 
