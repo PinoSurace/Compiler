@@ -24,6 +24,13 @@ END;
 
 Print(Two_args( 1, 2 ));
 
+VAR variable IS 10;
+variable <- 2018-11-01;
+variable.year <- 2020;
+
+Print(variable'year);
+
+
 
 
 

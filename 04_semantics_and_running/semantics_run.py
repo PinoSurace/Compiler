@@ -68,13 +68,25 @@ def eval_node(node, semdata):
     return eval_node(node.child_value, semdata)
 
   elif node.nodetype == 'assignment':
-    symtbl[node.child_var.value].value = eval_node(node.child_value, semdata)
+    res = eval_node(node.child_value, semdata)
+    if (node.child_var.nodetype == 'binary_op'):
+      var = node.child_var.child_idx1.value
+      attr = node.child_var.child_idx2.value
+      setattr(symtbl[var], attr, res)
+      #symtbl[var][attr] = res
+    else:
+      symtbl[node.child_var.value].value = res
     return None
 
   elif node.nodetype == 'binary_op':
 
-    out = semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
-    return out
+    if(node.value == "'"):
+      var = node.child_idx1.value
+      attr = node.child_idx2.value
+      return getattr(symtbl[var],attr)
+    else:
+      return semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
+
 
 
   elif node.nodetype == 'unary_op':
