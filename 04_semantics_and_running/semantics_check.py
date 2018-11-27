@@ -42,9 +42,9 @@ def check_function_call(node, semdata):
   build_in = ['Input', 'Print']
   name = node.child_func_name.value
   if name not in build_in:
-    if not hasattr(semdata.funcs, name):
+    if name not in semdata.funcs.keys():
       return "Function " + str(name) + "should be defined before use"
-    elif len(semdata.funcs[name].params) != len (node.child_args.children_expr):
+    elif len(semdata.funcs[name]['params']) != len (node.child_args.children_expr):
       return "Number of arguments is wrong in the function "+ name
 
 
