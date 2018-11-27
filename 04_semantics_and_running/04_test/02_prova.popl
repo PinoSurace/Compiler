@@ -1,0 +1,29 @@
+VAR abc IS 10;
+VAR abc IS 10;
+
+abc <- 10;
+
+efg <- 10;
+
+FUNCTION Two_args( arg1, arg2 ) ->
+  IF 3 <= 4 THEN
+    Print("ok");
+   ENDIF;
+  RETURN arg1 + arg2;
+END;
+
+FUNCTION Two_args( arg6, arg7 ) ->
+  IF 3 <= 4 THEN
+    Print("ok");
+   ENDIF;
+  RETURN arg1 + arg2;
+END;
+
+FUNCTION Tree_args( arg1, arg2 ) ->
+  IF 3 <= 4 THEN
+    Print("ok");
+   ENDIF;
+  RETURN arg1 + arg2;
+END;
+
+Four_args( arg1, arg2 );

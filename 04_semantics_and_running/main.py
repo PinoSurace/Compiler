@@ -392,14 +392,14 @@ if __name__ == '__main__':
           treeprint(ast_tree, outformat)
 
         semdata = SemData()
-        #check_semantics(ast_tree, semdata)
-        #if semdata.errors:
-        #  print("Semantic errors:")
-        #  for err in semdata.errors:
-        #    print(err)
-        #else:
-        print("Semantics ok, running:")
-        run_program(ast_tree, semdata)
+        check_semantics(ast_tree, semdata)
+        if semdata.errors:
+          print("Semantic errors:")
+          for err in semdata.errors:
+            print(err)
+        else:
+            print("Semantics ok, running:")
+            run_program(ast_tree, semdata)
 
 
 
