@@ -129,6 +129,7 @@ def p_statement(p):
     p[0] = p[1]
 
 #return_statement ::= RETURN expr
+#it is represented as a node with a child
 def p_return_statement(p):
     '''return_statement : RETURN expr'''
     #print( 'return_statement' )
@@ -136,6 +137,7 @@ def p_return_statement(p):
     p[0].child_value = p[2]
 
 #assignment ::= varIDENT [ DOT varIDENT ] LARROW expr
+#it is represented as a node with two children: variable (with or without attibute) and the value assigned to it
 def p_assignment1(p):
     '''assignment : varIDENT DOT varIDENT LARROW expr'''
     #print( 'assignment( '+p[1]+' )' )
@@ -160,6 +162,7 @@ def p_assignment2(p):
     p[0].child_value = p[4]
 
 #expr ::= simple_expr [ ( EQ | NOTEQ | LT | LTEQ | GT | GTEQ ) simple_expr ]
+#if there is only one simple expression it is not represented as a node. otherwise the binary operator will be the node.
 def p_expr1(p):
     '''expr : simple_expr'''
     p[0] = p[1]
@@ -182,6 +185,7 @@ def p_expr2(p):
     p[0].child_idx2 = p[3]
 
 #simple_expr ::= term { ( PLUS | MINUS ) term }
+#if there is only one term it is not represented as a node. otherwise the binary operator will be the node.
 def p_simple_expr1(p):
     '''simple_expr : term'''
     p[0] = p[1]
@@ -203,6 +207,7 @@ def p_simple_expr2(p):
 
 
 #term ::= factor { ( MULT | DIV ) factor }
+#if there is only one simple term it is not represented as a node. otherwise the binary operator will be the node.
 def p_term1(p):
     '''term : simple_term'''
     p[0] = p[1]
@@ -223,6 +228,7 @@ def p_term2(p):
     p[0].child_idx1 = p[1]
     p[0].child_idx2 = p[3]
 
+#if there is only one factor it is not represented as a node. otherwise the binary operator will be the node.
 def p_simple_term1(p):
     '''simple_term : factor'''
     p[0] = p[1]
@@ -237,6 +243,7 @@ def p_simple_term2(p):
     p[0].child_idx2 = p[3]
 
 #factor ::= [ MINUS ] atom
+
 def p_factor1(p):
     '''factor : MINUS atom'''
     p[0] = ASTnode('unary_op')
