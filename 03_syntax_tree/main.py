@@ -6,6 +6,7 @@ from tree_print import treeprint
 # tokens are defined in lex-module, but needed here also in syntax rules
 tokens = popl_lex.tokens
 
+#class used to represent each node
 class ASTnode:
     def __init__(self, typestr):
         self.nodetype = typestr
@@ -17,6 +18,7 @@ class ASTnode:
 # is the only one left, we do not have any syntax errors
 
 #program ::= codeitem { codeitem }
+#program has a set of codeitems children.
 def p_program1(p):
     '''program : codeitem'''
     p[0] = ASTnode('program')
@@ -30,6 +32,7 @@ def p_program2(p):
 
 
 #codeitem ::= var_definition | func_definition | statement_seq
+#codeitem is not represented as a node.
 def p_codeitem(p):
     '''codeitem : var_definition
                 | func_definition
@@ -38,6 +41,7 @@ def p_codeitem(p):
    #print( 'codeitem' )
 
 #var_definition ::= VAR varIDENT IS expr SEMICOLON
+#var definition is represented as a node with two children.
 def p_var_definition(p):
     '''var_definition : VAR varIDENT IS expr SEMICOLON'''
     #print( 'var_definition( '+p[2]+' )' )
@@ -49,6 +53,8 @@ def p_var_definition(p):
 
 
 #func_definition ::= FUNCTION funcIDENT LPAREN [ formals ] RPAREN fbody
+#func definition is represented as a node with two children in case there are not parameters,
+#otherwise it will have 3 children.
 def p_func_definition1(p):
     '''func_definition : FUNCTION funcIDENT LPAREN formals RPAREN fbody'''
     #print( 'func_definition( ' +p[2]+ ' )' )
@@ -68,6 +74,7 @@ def p_func_definition2(p):
     p[0].child_func_body = p[6]
 
 #formals ::= varIDENT { COMMA varIDENT }
+#formals is represented as a node with a list of children.
 def p_formals1(p):
     '''formals : varIDENT'''
     #print( 'formals' )
@@ -87,12 +94,14 @@ def p_formals2(p):
 
 
 #fbody ::= RARROW statement_seq END SEMICOLON
+#it is not represented as a node.
 def p_fbody(p):
     '''fbody : RARROW statement_seq END SEMICOLON'''
     #print( 'fbody' )
     p[0] = p[2]
 
 #statement_seq ::= statement SEMICOLON { statement SEMICOLON }
+#it is represented as a node with a list of statement children.
 def p_statement_seq1(p):
     '''statement_seq : statement SEMICOLON'''
     #print( 'statement_seq' )
@@ -108,6 +117,7 @@ def p_statement_seq2(p):
 
 #statement ::= assignment | return_statement | **if_statement**
 #            | **while_statement** | **function_call**
+#it is not represented as a node.
 def p_statement(p):
     '''statement : assignment
                  | return_statement
