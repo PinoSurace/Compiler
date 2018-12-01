@@ -4,6 +4,9 @@
 from semantics_common import visit_tree, SymbolData
 
 # Define semantic check functions
+
+
+#
 def check_var_definition(node, semdata):
   name = node.child_var_name.value
   if name in semdata.vars:
@@ -14,6 +17,9 @@ def check_var_definition(node, semdata):
 def check_var_assignment(node, semdata):
   if node.child_var.nodetype == 'binary_op' :
     name = node.child_var.child_idx1.value
+    attr = node.child_var.child_idx2.value
+    if attr not in ['day', 'month', 'year']:
+      return "Attribute "+ str(attr) + " is not valid."
   else:
     name = node.child_var.value
 
@@ -46,6 +52,17 @@ def check_function_call(node, semdata):
       return "Function " + str(name) + "should be defined before use"
     elif len(semdata.funcs[name]['params']) != len (node.child_args.children_expr):
       return "Number of arguments is wrong in the function "+ name
+
+def check_binary_op(node, semdata):
+  if node.value == "'":
+    attr = node.child_idx2.value
+    if attr not in ['day', 'month', 'year', 'isLeapYear?', 'isWorkday?']:
+      return "Attribute " + str(attr) + " is not valid."
+
+
+
+
+
 
 
 
@@ -103,7 +120,8 @@ def check_stack_program_after(node, semdata):
 check_var_func = {'var_definition': (check_var_definition, None),
                   'func_definition': (check_function_definition, None),
                   'assignment': (check_var_assignment, None),
-                  'function_call': (check_function_call, None)}
+                  'function_call': (check_function_call, None),
+                  'binary_op': (check_binary_op, None)}
 
 check_literals = {'literal': (check_literal_size, None)}
 

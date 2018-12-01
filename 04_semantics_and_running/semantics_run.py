@@ -3,7 +3,7 @@
 
 #python main.py --treetype dot -f 04_test\01_prova.popl
 from semantics_common import SemData ,SymbolData
-import datetime
+import datetime, calendar
 
 def run_program(tree, semdata):
   #semdata.old_stacks = []
@@ -21,7 +21,7 @@ def build_in_input():
   except ValueError:
     try:
       value = datetime.datetime.strptime(input_value, '%Y-%m-%d')
-      print(type(value))
+
       return value
     except ValueError:
       print(type(input_value))
@@ -72,18 +72,34 @@ def eval_node(node, semdata):
     if (node.child_var.nodetype == 'binary_op'):
       var = node.child_var.child_idx1.value
       attr = node.child_var.child_idx2.value
-      setattr(symtbl[var], attr, res)
-      #symtbl[var][attr] = res
+      if attr == 'day':
+        symtbl[var].value = datetime.date(symtbl[var].value.year, symtbl[var].value.month, res)
+      elif attr == 'month':
+        symtbl[var].value = datetime.date(symtbl[var].value.year, res, symtbl[var].value.day)
+      else:
+        symtbl[var].value = datetime.date(res, symtbl[var].value.month, symtbl[var].value.day)
+
     else:
       symtbl[node.child_var.value].value = res
     return None
 
   elif node.nodetype == 'binary_op':
 
+
     if(node.value == "'"):
-      var = node.child_idx1.value
+      var = eval_node(node.child_idx1, semdata)
       attr = node.child_idx2.value
-      return getattr(symtbl[var],attr)
+      if attr == 'day':
+        return var.day
+      elif attr ==  'month':
+        return var.month
+      elif attr ==  'year':
+        return var.year
+      elif attr == 'isLeapYear?':
+        return calendar.isleap(var.year)
+      elif attr == 'isWorkday?':
+        return calendar.weekday(var.year, var.month, var.day) in range(0,5)
+      #return getattr(symtbl[var],attr)
     else:
       return semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
 
@@ -91,9 +107,14 @@ def eval_node(node, semdata):
 
   elif node.nodetype == 'unary_op':
     return -node.child_atom.value
-    return None
+
 
   elif node.nodetype == 'literal':
+    #try:
+    #  value = datetime.datetime.strptime(node.value, '%Y-%m-%d')
+    #  return value
+    #except ValueError:
+
     return node.value
 
   elif node.nodetype == 'identifier':
