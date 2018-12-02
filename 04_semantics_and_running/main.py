@@ -394,9 +394,9 @@ if __name__ == '__main__':
         semdata = SemData()
         check_semantics(ast_tree, semdata)
         if semdata.errors:
-          print("Semantic errors:")
-          for err in semdata.errors:
-            print(err)
+            print("Semantic errors:")
+            for err in semdata.errors:
+                print(err)
         else:
             print("Semantics ok, running:")
             run_program(ast_tree, semdata)

@@ -10,21 +10,24 @@ from semantics_common import visit_tree, SymbolData
 def check_var_definition(node, semdata):
   name = node.child_var_name.value
   if name in semdata.vars:
-    return "Variable " + str(name) + "is already defined"
+    return "Variable " + str(name) + " is already defined"
   else:
     semdata.vars.append(name)
 
 def check_var_assignment(node, semdata):
   if node.child_var.nodetype == 'binary_op' :
     name = node.child_var.child_idx1.value
+    if (name not in semdata.vars):
+      return "Variable " + str(name) + "should be defined before use"
     attr = node.child_var.child_idx2.value
     if attr not in ['day', 'month', 'year']:
       return "Attribute "+ str(attr) + " is not valid."
   else:
     name = node.child_var.value
+    if (name not in semdata.vars):
+      return "Variable " + str(name) + "should be defined before use"
 
-  if (name not in semdata.vars):
-    return "Variable " + str(name) + "should be defined before use"
+
 
 def check_function_definition(node, semdata):
   name = node.child_func_name.value
@@ -32,7 +35,6 @@ def check_function_definition(node, semdata):
     return "Function " + str(name) + "is already defined"
   else:
     semdata.funcs[name] = {}
-
 
     if (hasattr(node, 'child_func_params')):
       params = []

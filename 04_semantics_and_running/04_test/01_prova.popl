@@ -1,3 +1,12 @@
+VAR christmas_day IS 2018-12-25;
+VAR christmas_day IS 2018-12-25;
+VAR diff IS christmas_day - today;
+IF diff = 1 THEN
+  Print( "Jouluaatto!" );
+ELSE
+  Print( diff, "days until christmas" );
+ENDIF;
+
 VAR ee IS 1999-12-01;
 
 Print(ee);
@@ -10,6 +19,8 @@ Print(ee - 1999-11-20);
 
 Print(ee + 5);
 Print("stop");
+Print;
+Print(1999-12-01 < 1999-12-02);
 
 
 

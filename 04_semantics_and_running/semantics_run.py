@@ -100,7 +100,7 @@ def eval_node(node, semdata):
         return calendar.isleap(var.year)
       elif attr == 'isWorkday?':
         return calendar.weekday(var.year, var.month, var.day) in range(0,5)
-      #return getattr(symtbl[var],attr)
+
     elif node.value == '+':
       if isinstance(eval_node(node1, semdata), datetime.date) :
         return eval_node(node1, semdata) + datetime.timedelta(days=eval_node(node2, semdata))
@@ -110,7 +110,7 @@ def eval_node(node, semdata):
         return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
     else:
       return semdata.binary_op[node.value](eval_node(node.child_idx1, semdata), eval_node(node.child_idx2, semdata))
-      #return semdata.binary_op [node.value] (eval_node(node1, semdata) , eval_node(node2, semdata))
+
 
 
 
@@ -132,9 +132,11 @@ def eval_node(node, semdata):
     if node.child_func_name.value == 'Input':
       return build_in_input()
     elif node.child_func_name.value == 'Print':
-
-      for i in node.child_args.children_expr:
-        print(str(eval_node(i, semdata)))
+      if (hasattr(node, 'child_args')):
+        for i in node.child_args.children_expr:
+          print(str(eval_node(i, semdata)))
+      else:
+        print()
         #if i.nodetype == 'identifier':
         #  name = i.value
         #  print(str(symtbl[name].value))
@@ -178,29 +180,3 @@ def eval_node(node, semdata):
       eval_node(node.child_loop_body, semdata)
     return None
 
-
-
-
-  #elif node.nodetype == 'push':
-  #  semdata.stack.append(node.child_roman.value)
-  #  return None
-  #elif node.nodetype == 'pop':
-  #  semdata.stack.pop()
-  #  return None
-  #elif node.nodetype == 'swap':
-  #  semdata.stack[-1], semdata.stack[-2] = semdata.stack[-2], semdata.stack[-1]
-  #  return None
-  #elif node.nodetype == 'complex-swap':
-  #  idx1 = node.child_idx1.value
-  #  idx2 = node.child_idx2.value
-  #  semdata.stack[-idx1], semdata.stack[-idx2] = semdata.stack[-idx2], semdata.stack[-idx1]
-  #  return None
-  #elif node.nodetype == 'add':
-  #  semdata.stack.append(semdata.stack.pop() + semdata.stack.pop())
-  #  return None
-  #elif node.nodetype == 'sub':
-  #  semdata.stack.append(semdata.stack.pop() - semdata.stack.pop())
-  #  return None
-  #elif node.nodetype == 'print':
-  #  print(semdata.stack.pop())
-  #  return None
