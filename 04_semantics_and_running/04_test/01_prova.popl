@@ -6,10 +6,13 @@ Print(ee'year);
 ee.year <- 2000;
 Print(ee);
 Print(ee'year);
+Print(ee - 1999-11-20);
+
+Print(ee + 5);
 Print("stop");
 
 
-Input;
+
 Print(5, 5 * 3 + 4);
 Print( 5**5);
 Print(0 < 0);

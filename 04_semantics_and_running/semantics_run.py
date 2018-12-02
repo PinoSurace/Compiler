@@ -84,10 +84,11 @@ def eval_node(node, semdata):
     return None
 
   elif node.nodetype == 'binary_op':
-
+    node1 = node.child_idx1
+    node2 = node.child_idx2
 
     if(node.value == "'"):
-      var = eval_node(node.child_idx1, semdata)
+      var = eval_node(node1, semdata)
       attr = node.child_idx2.value
       if attr == 'day':
         return var.day
@@ -100,8 +101,16 @@ def eval_node(node, semdata):
       elif attr == 'isWorkday?':
         return calendar.weekday(var.year, var.month, var.day) in range(0,5)
       #return getattr(symtbl[var],attr)
+    elif node.value == '+':
+      if isinstance(eval_node(node1, semdata), datetime.date) :
+        return eval_node(node1, semdata) + datetime.timedelta(days=eval_node(node2, semdata))
+      elif isinstance(eval_node(node2, semdata), datetime.date) :
+        return eval_node(node2, semdata) + datetime.timedelta(days=eval_node(node1, semdata))
+      else:
+        return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
     else:
-      return semdata.binary_op [node.value] (eval_node(node.child_idx1, semdata) , eval_node(node.child_idx2, semdata))
+      return semdata.binary_op[node.value](eval_node(node.child_idx1, semdata), eval_node(node.child_idx2, semdata))
+      #return semdata.binary_op [node.value] (eval_node(node1, semdata) , eval_node(node2, semdata))
 
 
 
@@ -110,10 +119,6 @@ def eval_node(node, semdata):
 
 
   elif node.nodetype == 'literal':
-    #try:
-    #  value = datetime.datetime.strptime(node.value, '%Y-%m-%d')
-    #  return value
-    #except ValueError:
 
     return node.value
 

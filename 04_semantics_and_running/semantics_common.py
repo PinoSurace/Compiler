@@ -5,10 +5,11 @@
 
 from tree_print import get_childvars
 import math
-
+import datetime
 
 # A class for collecting data needed during semantic analysis etc.
 # By default contains the symbol table
+
 
 class SemData:
     def __init__(self):
