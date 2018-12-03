@@ -8,7 +8,7 @@ import datetime, calendar
 def run_program(tree, semdata):
   #semdata.old_stacks = []
   #semdata.stack = []
-  #semdata = SemData()
+  semdata.symtbl = dict()
 
   eval_node(tree, semdata)
 
@@ -104,12 +104,15 @@ def eval_node(node, semdata):
     elif node.value == '+':
       if isinstance(eval_node(node1, semdata), datetime.date) :
         return eval_node(node1, semdata) + datetime.timedelta(days=eval_node(node2, semdata))
-      elif isinstance(eval_node(node2, semdata), datetime.date) :
-        return eval_node(node2, semdata) + datetime.timedelta(days=eval_node(node1, semdata))
+      #elif isinstance(eval_node(node2, semdata), datetime.date) :
+      #  return eval_node(node2, semdata) + datetime.timedelta(days=eval_node(node1, semdata))
       else:
         return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
+    elif node.value == '-':
+      if isinstance(eval_node(node1, semdata), datetime.date):
+        return (eval_node(node1, semdata) - eval_node(node2, semdata)).days
     else:
-      return semdata.binary_op[node.value](eval_node(node.child_idx1, semdata), eval_node(node.child_idx2, semdata))
+      return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
 
 
 

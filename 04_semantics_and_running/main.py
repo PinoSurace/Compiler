@@ -144,7 +144,7 @@ def p_assignment1(p):
     p[0].child_var.value = p[2]
     p[0].child_var.child_idx1 = ASTnode('identifier')
     p[0].child_var.child_idx1.value = p[1]
-    p[0].child_var.child_idx2 = ASTnode('identifier')
+    p[0].child_var.child_idx2 = ASTnode('attribute')
     p[0].child_var.child_idx2.value = p[3]
     p[0].child_value = p[5]
 
@@ -277,7 +277,7 @@ def p_atom3(p):
         p[0].value = p[2]
         p[0].child_idx1 = ASTnode('identifier')
         p[0].child_idx1.value = p[1]
-        p[0].child_idx2 = ASTnode('identifier')
+        p[0].child_idx2 = ASTnode('attribute')
         p[0].child_idx2.value = p[3]
 
     else:

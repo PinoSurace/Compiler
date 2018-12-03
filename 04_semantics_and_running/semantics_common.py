@@ -16,17 +16,17 @@ class SemData:
         self.symtbl = dict()
 
         self.binary_op = {
-            "**": lambda x, y: math.pow(x , y),
+            "**": lambda x, y: int(math.pow(x , y)),
             "=": lambda x, y: x == y,
             "!=": lambda x, y: x != y,
             "<": lambda x, y: x < y,
             "<=": lambda x, y: x <= y,
             ">": lambda x, y: x > y,
             ">=": lambda x, y: x >= y,
-            "+": lambda x, y: x + y,
-            "-": lambda x, y: x - y,
-            "*": lambda x, y: x * y,
-            "/": lambda x, y: x / y,
+            "+": lambda x, y: int(x + y),
+            "-": lambda x, y: int(x - y),
+            "*": lambda x, y: int(x * y),
+            "/": lambda x, y: int(x / y),
         }
 
 

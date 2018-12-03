@@ -9,50 +9,51 @@ from semantics_common import visit_tree, SymbolData
 #
 def check_var_definition(node, semdata):
   name = node.child_var_name.value
-  if name in semdata.vars:
+  if name in semdata.symtbl:
     return "Variable " + str(name) + " is already defined"
   else:
-    semdata.vars.append(name)
+    semdata.symtbl[name] = node
 
 def check_var_assignment(node, semdata):
   if node.child_var.nodetype == 'binary_op' :
     name = node.child_var.child_idx1.value
-    if (name not in semdata.vars):
+    if (name not in semdata.symtbl):
       return "Variable " + str(name) + "should be defined before use"
     attr = node.child_var.child_idx2.value
     if attr not in ['day', 'month', 'year']:
       return "Attribute "+ str(attr) + " is not valid."
   else:
     name = node.child_var.value
-    if (name not in semdata.vars):
+    if (name not in semdata.symtbl):
       return "Variable " + str(name) + "should be defined before use"
 
 
 
 def check_function_definition(node, semdata):
   name = node.child_func_name.value
-  if name in semdata.funcs:
+  if name in semdata.symtbl:
     return "Function " + str(name) + "is already defined"
   else:
-    semdata.funcs[name] = {}
+    semdata.symtbl[name] = {}
 
     if (hasattr(node, 'child_func_params')):
       params = []
       for i in node.child_func_params.children_args:
         param = i.value
-        if param in semdata.vars:
+        if param in semdata.symtbl:
           return "You have already defined a variable with this name "+ param
+        semdata.symtbl[param] = ''
         params.append(param)
-      semdata.funcs[name]['params'] = params
+      semdata.symtbl[name]['params'] = params
       #setattr(semdata.funcs[name], 'params', params)
 
 def check_function_call(node, semdata):
   build_in = ['Input', 'Print']
   name = node.child_func_name.value
   if name not in build_in:
-    if name not in semdata.funcs.keys():
+    if name not in semdata.symtbl.keys():
       return "Function " + str(name) + "should be defined before use"
-    elif len(semdata.funcs[name]['params']) != len (node.child_args.children_expr):
+    elif len(semdata.symtbl[name]['params']) != len (node.child_args.children_expr):
       return "Number of arguments is wrong in the function "+ name
 
 def check_binary_op(node, semdata):
@@ -60,6 +61,16 @@ def check_binary_op(node, semdata):
     attr = node.child_idx2.value
     if attr not in ['day', 'month', 'year', 'isLeapYear?', 'isWorkday?']:
       return "Attribute " + str(attr) + " is not valid."
+  elif node.child_idx1.nodetype == 'literal' and node.child_idx2.nodetype == 'literal':
+    if (isinstance(node.child_idx1.value, int) and isinstance(node.child_idx2.value, str)) or \
+            (isinstance(node.child_idx2.value, int) and isinstance(node.child_idx1.value, str)):
+      return "Integer and string cannot be used in the same expression: (" +str(node.child_idx1.value) \
+              + str(node.value)+ str(node.child_idx2.value)+")"
+
+def check_identifier(node, semdata):
+  build_in = ['Input', 'Print']
+  if node.value not in semdata.symtbl and node.value not in build_in:
+    return "'"+ str(node.value) + "'"+ " should be defined before use."
 
 
 
@@ -123,7 +134,8 @@ check_var_func = {'var_definition': (check_var_definition, None),
                   'func_definition': (check_function_definition, None),
                   'assignment': (check_var_assignment, None),
                   'function_call': (check_function_call, None),
-                  'binary_op': (check_binary_op, None)}
+                  'binary_op': (check_binary_op, None),
+                  'identifier': (check_identifier, None)}
 
 check_literals = {'literal': (check_literal_size, None)}
 
@@ -138,8 +150,8 @@ check_stack_size = {'push': (increment_stack_size, None),
 
 def check_semantics(tree, semdata):
   '''run all semantic checks'''
-  semdata.vars = []
-  semdata.funcs = {}
+
+  semdata.symtbl  = dict()
   visit_tree(tree, check_var_func, semdata)
 
   #visit_tree(tree, check_literals, semdata)
