@@ -1,0 +1,61 @@
+[In any boolean context Integer zero is false and all other values are true.]
+Print(5);
+Print(0);
+
+[In binary operations (expressions), both operands can be integers and result is an integer.]
+Print(5 +5);
+
+
+[Date + Integer is valid. Integer number of days is added to the Date.]
+Print(1999-12-01 + 5);
+
+[Date - Date is valid. The result is an integer telling how many days the dates differ.]
+Print(1999-12-01 - 1999-01-10);
+
+[Dates can be compared to each other (DATE1 < DATE2), similarly integers
+can be compared to each other. It's undefined whether strings can be compared to each other. ]
+Print(1999-12-01 < 1999-01-10);
+
+[These apostrophe-operators read some value from a Date: ]
+VAR date IS 1999-12-01;
+Print(date'day);
+Print(date'month);
+Print(date'year);
+Print(date'isLeapYear?);
+Print(date'isWorkday?);
+
+[The dot-operator in assigment lvalue can target "parts" of a Date:]
+
+date.day <- 5;
+date.month <- 2;
+date.year <- 2027;
+Print(date);
+
+[Statements ]
+VAR var IS 5;
+IF var THEN
+  Print("ok");
+ENDIF;
+
+WHILE var > 3 DO
+Print("while");
+var <- var -1;
+Print(var);
+ENDWHILE;
+
+DO
+Print("do_while");
+var <- var -1;
+WHILE var > 3;
+
+FUNCTION Two_args( arg1 ) ->
+  arg1 <- 10;
+  RETURN 4;
+  Print("inside");
+
+END;
+
+VAR test IS 1000;
+Print(test);
+Print(Two_args(test));
+Print(test);

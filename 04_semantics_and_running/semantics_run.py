@@ -28,6 +28,9 @@ def build_in_input():
       return input_value
 
 
+
+
+
 def eval_node(node, semdata):
   symtbl = semdata.symtbl
 
@@ -111,6 +114,8 @@ def eval_node(node, semdata):
     elif node.value == '-':
       if isinstance(eval_node(node1, semdata), datetime.date):
         return (eval_node(node1, semdata) - eval_node(node2, semdata)).days
+      else:
+        return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
     else:
       return semdata.binary_op[node.value](eval_node(node1, semdata), eval_node(node2, semdata))
 
@@ -127,6 +132,7 @@ def eval_node(node, semdata):
 
   elif node.nodetype == 'identifier':
     if node.value in symtbl:
+
       return symtbl[node.value].value
     else:
       return node.value
