@@ -15,6 +15,7 @@ class SemData:
     def __init__(self):
         self.symtbl = dict()
 
+        #structure to get the operation based on the respective symbol.
         self.binary_op = {
             "**": lambda x, y: int(math.pow(x , y)),
             "=": lambda x, y: x == y,
