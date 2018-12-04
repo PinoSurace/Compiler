@@ -50,7 +50,7 @@ WHILE var > 3;
 
 FUNCTION Two_args( arg1 ) ->
   arg1 <- 10;
-  RETURN 4;
+
   Print("inside");
 
 END;
@@ -59,3 +59,8 @@ VAR test IS 1000;
 Print(test);
 Print(Two_args(test));
 Print(test);
+Print(test);
+Two_args(test);
+Print(test);
+Print(test);
+
