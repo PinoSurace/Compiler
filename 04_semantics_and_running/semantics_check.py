@@ -6,7 +6,8 @@ from semantics_common import visit_tree, SymbolData
 # Define semantic check functions
 
 
-#
+#check if the variable is already in the symboltable and in case give an error,
+#otherwise the variable is added to the symboltable
 def check_var_definition(node, semdata):
   name = node.child_var_name.value
   if name in semdata.symtbl:
@@ -14,6 +15,9 @@ def check_var_definition(node, semdata):
   else:
     semdata.symtbl[name] = node
 
+
+# check that if there is an attibute then it is between those defined for the date types, otherwise gives an error.
+# if the variable is not in the symboltable then gives an error.
 def check_var_assignment(node, semdata):
   if node.child_var.nodetype == 'binary_op' :
     name = node.child_var.child_idx1.value
@@ -28,7 +32,9 @@ def check_var_assignment(node, semdata):
       return "Variable " + str(name) + "should be defined before use"
 
 
-
+# checks if the function is already in the symboltable and in case gives and error,
+# otherwise the function is added to the symboltable. after that the parameters are checked and if
+# they are already defined, an error is given, otherwise they are added to the symboltable as normal variables.
 def check_function_definition(node, semdata):
   name = node.child_func_name.value
   if name in semdata.symtbl:
@@ -47,6 +53,9 @@ def check_function_definition(node, semdata):
       semdata.symtbl[name]['params'] = params
       #setattr(semdata.funcs[name], 'params', params)
 
+# checks if the function has been defined before and in case it has not then an error is returned,
+# moreover there is a check on the number of arguments passed that should be the same of the
+# number of parameters defined in the definition, otherwise an error is given.
 def check_function_call(node, semdata):
   build_in = ['Input', 'Print']
   name = node.child_func_name.value
@@ -56,6 +65,9 @@ def check_function_call(node, semdata):
     elif len(semdata.symtbl[name]['params']) != len (node.child_args.children_expr):
       return "Number of arguments is wrong in the function "+ name
 
+
+# check if the attribute of the variable is one of those defined, otherwise gives an error.
+# checks that sting and integer are not in the same expression, otherwise it gives an error.
 def check_binary_op(node, semdata):
   if node.value == "'":
     attr = node.child_idx2.value
@@ -67,6 +79,11 @@ def check_binary_op(node, semdata):
       return "Integer and string cannot be used in the same expression: (" +str(node.child_idx1.value) \
               + str(node.value)+ str(node.child_idx2.value)+")"
 
+
+
+# checks that each identifier (functions and variables)
+# are defined before the use in a more general way, so that
+# all the cases are covered.
 def check_identifier(node, semdata):
   build_in = ['Input', 'Print']
   if node.value not in semdata.symtbl and node.value not in build_in:
