@@ -13,7 +13,7 @@ def run_program(tree, semdata):
 
 
 #function that asks the input to the user and cast it depending on ita nature (int, data or string)
-def build_in_input():
+def built_in_input():
   input_value = input()
   try:
     value = int(input_value)
@@ -149,13 +149,13 @@ def eval_node(node, semdata):
     else:
       return node.value
 
-  #during function call is checked if it is one of the build in functions and in case they are executed.
+  #during function call is checked if it is one of the built in functions and in case they are executed.
   #Otherwise the function body of the function is executed after it is got from the symboltable.
   #in case of parameters, the arguments value are assigned to the variables name in the symbol table and
   # they are considered as normal variables.
   elif node.nodetype == 'function_call':
     if node.child_func_name.value == 'Input':
-      return build_in_input()
+      return built_in_input()
     elif node.child_func_name.value == 'Print':
       if (hasattr(node, 'child_args')):
         for i in node.child_args.children_expr:

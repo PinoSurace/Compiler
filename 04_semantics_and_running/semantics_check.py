@@ -57,9 +57,9 @@ def check_function_definition(node, semdata):
 # moreover there is a check on the number of arguments passed that should be the same of the
 # number of parameters defined in the definition, otherwise an error is given.
 def check_function_call(node, semdata):
-  build_in = ['Input', 'Print']
+  built_in = ['Input', 'Print']
   name = node.child_func_name.value
-  if name not in build_in:
+  if name not in built_in:
     if name not in semdata.symtbl.keys():
       return "Function " + str(name) + "should be defined before use"
     elif len(semdata.symtbl[name]['params']) != len (node.child_args.children_expr):
@@ -85,8 +85,8 @@ def check_binary_op(node, semdata):
 # are defined before the use in a more general way, so that
 # all the cases are covered.
 def check_identifier(node, semdata):
-  build_in = ['Input', 'Print']
-  if node.value not in semdata.symtbl and node.value not in build_in:
+  built_in = ['Input', 'Print']
+  if node.value not in semdata.symtbl and node.value not in built_in:
     return "'"+ str(node.value) + "'"+ " should be defined before use."
 
 
