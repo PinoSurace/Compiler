@@ -55,6 +55,8 @@ FUNCTION Two_args( arg1 ) ->
 
 END;
 
+
+
 VAR test IS 1000;
 Print(test);
 Print(Two_args(test));

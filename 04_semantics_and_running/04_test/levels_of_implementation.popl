@@ -1,0 +1,88 @@
+[1)Evaluation of expressions consisting of arithmetic expressions and integer literals.
+Also, calls to built-in function "Print" work for at least integers and strings
+(can be implemented as a special case so that it's the only function call that works).]
+Print("-------------------level 1----------------");
+Print(1 + 2 *4 **2 -5);
+Print("Hello");
+
+[2)Additionally, using integer variables works (i.e., definition, assignment, reading the value).]
+Print("-------------------level 2----------------");
+VAR xx IS 10;
+Print(xx);
+xx <- "this";
+Print(xx);
+
+[3)In addition to integer arithmetic+variables, also date arithmetic
+(date+int and date-date) work, as well as date and string variables.]
+Print("-------------------level 3----------------");
+VAR date IS 1999-12-25;
+Print(date);
+Print(date +5);
+Print(date - 1998-11-06);
+Print(date'day);
+Print(date'month);
+Print(date'year);
+Print(date'isLeapYear?);
+Print(date'isWorkday?);
+
+date.day <- 10;
+date.month <- 10;
+date.year <- 1000;
+Print(date);
+
+VAR string IS "hello";
+Print(string);
+string <- "bye";
+Print(string);
+
+[4)Control structures IF and WHILE, and comparison operators also work.]
+Print("-------------------level 4----------------");
+
+VAR var IS 5;
+IF var THEN
+  Print("ok");
+ENDIF;
+
+WHILE var > 3 DO
+Print("while");
+var <- var -1;
+Print(var);
+ENDWHILE;
+
+DO
+Print("do_while");
+var <- var -1;
+WHILE var > 3;
+
+[5)In addition to above, function definitions, function calls and parameter passing works.]
+Print("-------------------level 5----------------");
+
+FUNCTION Two_args( arg1, arg2 ) ->
+  Print("inside");
+  Print(arg1);
+  arg1 <- 10;
+  Print(arg1);
+  Print(arg2);
+  Print("end");
+END;
+
+VAR test IS 1000;
+Print(test);
+Two_args(test, "hello");
+Print(test); [value does not change, pass-by-value function]
+
+[6) Additionally RETURN can be used to return a value and finish the execution of function. ]
+Print("-------------------level 6----------------");
+
+FUNCTION One_arg( arg3 ) ->
+  Print("inside");
+  Print("hello");
+  RETURN arg3;
+  Print("not printed");
+  Print("not printed");
+  Print("not printed");
+END;
+
+
+Print(One_arg( "arg3" ));
+
