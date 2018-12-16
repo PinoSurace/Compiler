@@ -70,4 +70,4 @@
 
 ## The test file can be found at the following path: /04_test/levels_of_implementation.popl
 
-* This assignment has been very interesting and useful to understand how compilers work and all the phases of compilation. I found this really helpful to really understand the theory and it makes the topic more interesting. 
+* This assignment has been very interesting and useful to understand how compilers work and all the phases of compilation. I found this really helpful to understand the theory and it makes the topic more interesting.
